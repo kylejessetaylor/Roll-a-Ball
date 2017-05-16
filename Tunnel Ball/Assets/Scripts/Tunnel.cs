@@ -4,18 +4,64 @@ using UnityEngine;
 
 public class Tunnel : MonoBehaviour {
 
-	public static Quarternion AngleAxis (float 45, Vector3.WindZo
+	//Speed Data
+	public float speedMultiplier = 0.015f;
+	public float maxSpeed = 70;
+	public float startSpeed = 0;
+	public float currentSpeed = 0;
 
-	// Use this for initialization
+	//Time
+	private float timer;
+
+
+	//Stored info on where the Marble (Tunnel) starts.
+	//public Quaternion startingRotation;
+	//public Vector3 startingPosition;
+
 	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+		ResetTunnel ();
 
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			transform.rotation = Quarternion.AngleAxis (45, Vector3.left);
+		//starts the time tracker
+		timer = Time.time;
+	}
+
+
+	void Update () {
+		tunnelRotation ();
+		//Velocity increase per sec.
+		if (Time.time - timer >= 0.5f) {
+			marbleVelocity ();
+			timer = Time.time;
+		} else {
+			transform.position += -transform.forward * currentSpeed;
 		}
 	}
+
+	private void ResetTunnel () {
+		//transform.position = startingPosition;
+		//transform.rotation = startingRotation;
+		currentSpeed = startSpeed;
+	}
+		
+	private void tunnelRotation () {
+		if (Input.GetKeyDown (KeyCode.RightArrow)) {
+			transform.Rotate(Vector3.back * 45);
+
+		}
+
+		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+			transform.Rotate(Vector3.forward * 45);
+		}
+	}
+
+	private void marbleVelocity () {
+		if (currentSpeed < maxSpeed) {
+			currentSpeed = speedMultiplier * Mathf.Pow (Time.time, 1.1f);
+		}
+		if (currentSpeed >= maxSpeed) {
+			currentSpeed = maxSpeed;
+		}
+		transform.position += -transform.forward * currentSpeed;    
+	}
+		
 }
