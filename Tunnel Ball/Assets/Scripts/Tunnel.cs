@@ -5,63 +5,72 @@ using UnityEngine;
 public class Tunnel : MonoBehaviour {
 
 	//Speed Data
-	public float speedMultiplier = 0.015f;
-	public float maxSpeed = 70;
+	public float speedMultiplier = 0.02f;
+	public float maxSpeed = 1.5f;
 	public float startSpeed = 0;
 	public float currentSpeed = 0;
 
 	//Time
 	private float timer;
 
+	//Rotation numbers
+	public int positionCounter = 1;
 
-	//Stored info on where the Marble (Tunnel) starts.
-	//public Quaternion startingRotation;
-	//public Vector3 startingPosition;
+	//Smooth Rotation
+	public float rotationSpeed = 10;
+	private Quaternion targetRotation;
+
 
 	void Start () {
 		ResetTunnel ();
-
 		//starts the time tracker
-		timer = Time.time;
+		timer = Time.timeSinceLevelLoad;
+		targetRotation = transform.rotation;
 	}
 
 
 	void Update () {
 		tunnelRotation ();
-		//Velocity increase per sec.
-		if (Time.time - timer >= 0.5f) {
-			marbleVelocity ();
-			timer = Time.time;
-		} else {
-			transform.position += -transform.forward * currentSpeed;
-		}
+		tunnelAcceleration ();
 	}
 
+	//Resets Tunnel's Speed
 	private void ResetTunnel () {
-		//transform.position = startingPosition;
-		//transform.rotation = startingRotation;
 		currentSpeed = startSpeed;
 	}
-		
+
+	//Rotates Tunnel smoothly
 	private void tunnelRotation () {
 		if (Input.GetKeyDown (KeyCode.RightArrow)) {
-			transform.Rotate(Vector3.back * 45);
-
+			targetRotation *= Quaternion.AngleAxis (45, Vector3.back);
 		}
 
 		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			transform.Rotate(Vector3.forward * 45);
+			targetRotation *= Quaternion.AngleAxis (45, Vector3.forward);
 		}
+		transform.rotation = Quaternion.Slerp (transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 	}
 
+	//Velocity of the Tunnels
 	private void marbleVelocity () {
 		if (currentSpeed < maxSpeed) {
-			currentSpeed = speedMultiplier * Mathf.Pow (Time.time, 1.1f);
+			currentSpeed = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
 		}
 		if (currentSpeed >= maxSpeed) {
 			currentSpeed = maxSpeed;
 		}
 		transform.position += -transform.forward * currentSpeed;    
+	}
+
+	//Acceleration of the Tunnels
+	private void tunnelAcceleration () {
+		//Velocity increase per sec.
+		if (Time.timeSinceLevelLoad - timer >= 0.5f) {
+			marbleVelocity ();
+			timer = Time.timeSinceLevelLoad;
+		} else {
+			transform.position += -transform.forward * currentSpeed;
+		}
 	}
 		
 }
