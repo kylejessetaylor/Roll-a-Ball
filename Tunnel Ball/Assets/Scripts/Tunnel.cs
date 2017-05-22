@@ -6,9 +6,9 @@ public class Tunnel : MonoBehaviour {
 
 	//Speed Data
 	public float speedMultiplier = 0.02f;
-	public float maxSpeed = 1.5f;
+	public float maxVelocity = 1.5f;
 	public float startSpeed = 0;
-	public float currentSpeed = 0;
+	public float velocity = 0;
 
 	//Time
 	private float timer;
@@ -19,6 +19,8 @@ public class Tunnel : MonoBehaviour {
 	//Smooth Rotation
 	public float rotationSpeed = 10;
 	private Quaternion targetRotation;
+
+
 
 
 	void Start () {
@@ -36,7 +38,7 @@ public class Tunnel : MonoBehaviour {
 
 	//Resets Tunnel's Speed
 	private void ResetTunnel () {
-		currentSpeed = startSpeed;
+		velocity = startSpeed;
 	}
 
 	//Rotates Tunnel smoothly
@@ -51,26 +53,36 @@ public class Tunnel : MonoBehaviour {
 		transform.rotation = Quaternion.Slerp (transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 	}
 
-	//Velocity of the Tunnels
-	private void marbleVelocity () {
-		if (currentSpeed < maxSpeed) {
-			currentSpeed = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
-		}
-		if (currentSpeed >= maxSpeed) {
-			currentSpeed = maxSpeed;
-		}
-		transform.position += -transform.forward * currentSpeed;    
-	}
+//	//Velocity of the Tunnels
+//	private void marbleVelocity () {
+//		if (currentSpeed < maxSpeed) {
+//			currentSpeed = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
+//		}
+//		if (currentSpeed >= maxSpeed) {
+//			currentSpeed = maxSpeed;
+//		}
+//		transform.position += -transform.forward * currentSpeed;    
+//	}
+//
+//	//Acceleration of the Tunnels
+//	private void tunnelAcceleration () {
+//		//Velocity increase per sec.
+//		if (Time.timeSinceLevelLoad - timer >= 0.5f) {
+//			marbleVelocity ();
+//			timer = Time.timeSinceLevelLoad;
+//		} else {
+//			transform.position += -transform.forward * currentSpeed;
+//		}
+//	}
 
-	//Acceleration of the Tunnels
 	private void tunnelAcceleration () {
-		//Velocity increase per sec.
-		if (Time.timeSinceLevelLoad - timer >= 0.5f) {
-			marbleVelocity ();
-			timer = Time.timeSinceLevelLoad;
-		} else {
-			transform.position += -transform.forward * currentSpeed;
+		if (velocity < maxVelocity) {
+			velocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
 		}
+		if (velocity >= maxVelocity) {
+			velocity = maxVelocity;
+		}
+
+		transform.position += -transform.forward * velocity;
 	}
-		
 }
