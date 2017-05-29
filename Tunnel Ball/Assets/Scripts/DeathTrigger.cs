@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class DeathTrigger : MonoBehaviour {
 
-	public GameObject tunnelScript;
-	//On & Off UI
-	public GameObject youDeadUI;
-	public GameObject inGameUI;
+	//Stop player controlls & Tunnel Movement
 
-//	public GameObject Tunnelname;
+	//On & Off UI
+	private GameObject youDeadUI;
+	private GameObject inGameUI;
+
+
+	void Start () {
+		youDeadUI = GameObject.FindGameObjectWithTag ("YouDead");
+		inGameUI = GameObject.FindGameObjectWithTag ("InGame");
+	}
 
 	//Turns off Ball & Tunnel Movement
-	void OnTriggerStay(Collider other) {
-		Debug.Log ("Ded");
-
+	void OnTriggerEnter(Collider other) {
+		
 		if (other.tag == "Player") {
 			other.gameObject.SetActive (false);
+			//Turns death UI on
 			youDeadUI.gameObject.SetActive (true);
 			inGameUI.gameObject.SetActive (false);
+			//Deactivates Tunnel movement
 //			otherObject.GetComponent<NameOfScript>().enabled = false;
 		}
 	}

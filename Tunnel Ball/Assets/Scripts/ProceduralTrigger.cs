@@ -16,27 +16,27 @@ public class ProceduralTrigger : MonoBehaviour {
 	public int numberOfTunnelPieces = 2;
 
 	public float playerPositionCounter = 0;
-	public GameObject player;
+	private GameObject player;
 
-	bool yourVar;
+	bool buildPossible;
 
 	// Use this for initialization
 	void Start () {
 //		BuildLevel ();
+		player = GameObject.FindGameObjectWithTag ("Player");
 	}
 
 	void Update () {
-		//if (yourVar) {
-			//BuildLevel ();
-			//yourVar = false;
-		//}
+		if (buildPossible) {
+			BuildLevel ();
+			buildPossible = false;
+		}
 	}
 
 	// Update is called once per frame
 	void OnTriggerEnter (Collider other) {
 		if (other.tag == "Player") {
-			//yourVar = true;
-			BuildLevel();
+			buildPossible = true;
 		}
 	}
 
@@ -47,6 +47,4 @@ public class ProceduralTrigger : MonoBehaviour {
 
 		Instantiate (tunnelPieceToPlace, (Vector3.forward * depthOfTunnelPiece), Quaternion.identity);
 	}
-
-
 }

@@ -7,8 +7,8 @@ public class Tunnel : MonoBehaviour {
 	//Speed Data
 	public float speedMultiplier = 0.02f;
 	public float maxVelocity = 1.5f;
-	public float startSpeed = 0;
-	public float velocity = 0;
+	public float startVelocity = 0;
+	public float currentVelocity = 0;
 
 	//Time
 	private float timer;
@@ -20,14 +20,17 @@ public class Tunnel : MonoBehaviour {
 	public float rotationSpeed = 10;
 	private Quaternion targetRotation;
 
-
+	//Tunnel Rotation reader
+//	[HideInInspector]
+//	public GameObject glassRotation;
 
 
 	void Start () {
 		ResetTunnel ();
-		//starts the time tracker
+		//starts the time tracker & sets values.
 		timer = Time.timeSinceLevelLoad;
 		targetRotation = transform.rotation;
+//		glassRotation = tag
 	}
 
 
@@ -38,7 +41,7 @@ public class Tunnel : MonoBehaviour {
 
 	//Resets Tunnel's Speed
 	private void ResetTunnel () {
-		velocity = startSpeed;
+		currentVelocity = startVelocity;
 	}
 
 	//Rotates Tunnel smoothly
@@ -53,36 +56,38 @@ public class Tunnel : MonoBehaviour {
 		transform.rotation = Quaternion.Slerp (transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 	}
 
-//	//Velocity of the Tunnels
-//	private void marbleVelocity () {
-//		if (currentSpeed < maxSpeed) {
-//			currentSpeed = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
-//		}
-//		if (currentSpeed >= maxSpeed) {
-//			currentSpeed = maxSpeed;
-//		}
-//		transform.position += -transform.forward * currentSpeed;    
-//	}
+	//Velocity of the Tunnels
+	private void marbleVelocity () {
+		if (currentVelocity < maxVelocity) {
+			currentVelocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
+		}
+		if (currentVelocity >= maxVelocity) {
+			currentVelocity = maxVelocity;
+		}
+		//Stops Tunnel's rotation & movement if DeathTrigger activates.
+//		potentialStop ();
+		transform.position += -transform.forward * currentVelocity;
+	}
+
+	//Acceleration of the Tunnels
+	private void tunnelAcceleration () {
+		//Velocity increase per sec.
+		if (Time.timeSinceLevelLoad - timer >= 0.01f) {
+			marbleVelocity ();
+			timer = Time.timeSinceLevelLoad;
+		} else {
+			transform.position += -transform.forward * currentVelocity;
+		}
+	}
+
+	//Stops Tunnel's rotation & movement if DeathTrigger activates.
+//	private void potentialStop () {
+//		if (Time.timeScale = 0) {
+//		transform.position = transform.position;
 //
-//	//Acceleration of the Tunnels
-//	private void tunnelAcceleration () {
-//		//Velocity increase per sec.
-//		if (Time.timeSinceLevelLoad - timer >= 0.5f) {
-//			marbleVelocity ();
-//			timer = Time.timeSinceLevelLoad;
 //		} else {
 //			transform.position += -transform.forward * currentSpeed;
 //		}
 //	}
-
-	private void tunnelAcceleration () {
-		if (velocity < maxVelocity) {
-			velocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
-		}
-		if (velocity >= maxVelocity) {
-			velocity = maxVelocity;
-		}
-
-		transform.position += -transform.forward * velocity;
-	}
+		
 }
