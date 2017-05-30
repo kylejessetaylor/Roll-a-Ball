@@ -7,12 +7,16 @@ public class DeathTrigger : MonoBehaviour {
 	//Stop player controlls & Tunnel Movement
 
 	//On & Off UI
-	private GameObject youDeadUI;
+	private GameObject player;
 	private GameObject inGameUI;
+	private GameObject dead;
 
+	//Object that Tunnel's read rotation off.
+	private GameObject glass;
 
-	void Start () {
-		youDeadUI = GameObject.FindGameObjectWithTag ("YouDead");
+	void Awake () {
+		player = GameObject.FindGameObjectWithTag ("Player");
+		dead = GameObject.FindGameObjectWithTag ("Dead");
 		inGameUI = GameObject.FindGameObjectWithTag ("InGame");
 	}
 
@@ -21,11 +25,13 @@ public class DeathTrigger : MonoBehaviour {
 		
 		if (other.tag == "Player") {
 			other.gameObject.SetActive (false);
-			//Turns death UI on
-			youDeadUI.gameObject.SetActive (true);
+
+			//Turns restart UI on
 			inGameUI.gameObject.SetActive (false);
+			dead.transform.GetChild (0).gameObject.SetActive (true);
+
 			//Deactivates Tunnel movement
-//			otherObject.GetComponent<NameOfScript>().enabled = false;
+//			glass.GetComponent<GlassRotate>().enabled = false;
 		}
 	}
 }
