@@ -8,9 +8,11 @@ public class Score : MonoBehaviour {
 	public float scoremultiplier = 0.2f;
 	public Text score;
 	public Text finalScore;
+	public Text highScore;
 	public float timeBetweenScore = 2.0f;
 
-	float scorez;
+	protected float scorez;
+	protected float currentHighScore = 0;
 
 
 	// Use this for initialization
@@ -26,6 +28,10 @@ public class Score : MonoBehaviour {
 	public void CurrentScore () {
 		scorez = scoremultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.5f);
 		score.text = "Score: " + Mathf.Round (scorez);
-		finalScore.text = "Your Score: " + Mathf.Round (scorez);
+		if (scorez < currentHighScore) {
+			finalScore.text = "Your Score: " + Mathf.Round (scorez);
+		} else {
+			finalScore.text = "New Highscore: " + Mathf.Round (scorez)+"!!";
+		}
 	}
 }

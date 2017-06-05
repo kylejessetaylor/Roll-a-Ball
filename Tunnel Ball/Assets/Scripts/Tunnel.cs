@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tunnel : MonoBehaviour {
+public class Tunnel : DeathTrigger {
 
 	//Speed Data
 	public float speedMultiplier = 0.02f;
@@ -16,27 +16,24 @@ public class Tunnel : MonoBehaviour {
 	//Rotation numbers
 	public int positionCounter = 1;
 
-	//Smooth Rotation
-	public float rotationSpeed = 10;
-	private Quaternion targetRotation;
-
 	//Tunnel Rotation reader
-//	[HideInInspector]
-//	public GameObject glassRotation;
+	protected GameObject glass;
 
 
 	void Start () {
 		ResetTunnel ();
 		//starts the time tracker & sets values.
 		timer = Time.timeSinceLevelLoad;
-		targetRotation = transform.rotation;
-//		glassRotation = tag
+		//Object that tunnel's rotation is read from
+		glass = GameObject.FindGameObjectWithTag ("Controls");
 	}
 
 
 	void Update () {
 		tunnelRotation ();
-		tunnelAcceleration ();
+		if (stopTunnel == false) {
+			tunnelAcceleration ();
+		}
 	}
 
 	//Resets Tunnel's Speed
@@ -44,29 +41,23 @@ public class Tunnel : MonoBehaviour {
 		currentVelocity = startVelocity;
 	}
 
-	//Rotates Tunnel smoothly
-	private void tunnelRotation () {
-		if (Input.GetKeyDown (KeyCode.RightArrow)) {
-			targetRotation *= Quaternion.AngleAxis (45, Vector3.back);
-		}
 
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			targetRotation *= Quaternion.AngleAxis (45, Vector3.forward);
-		}
-		transform.rotation = Quaternion.Slerp (transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+	private void tunnelRotation () {
+		//Aligns all tunnel's to same rotation
+		transform.rotation = glass.transform.rotation;
 	}
 
 	//Velocity of the Tunnels
 	private void marbleVelocity () {
-		if (currentVelocity < maxVelocity) {
-			currentVelocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
+		if (stopTunnel == false) {
+			if (currentVelocity <= maxVelocity) {
+				currentVelocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
+			}
+			if (currentVelocity >= maxVelocity) {
+				currentVelocity = maxVelocity;
+			}
+			transform.position += -transform.forward * currentVelocity;
 		}
-		if (currentVelocity >= maxVelocity) {
-			currentVelocity = maxVelocity;
-		}
-		//Stops Tunnel's rotation & movement if DeathTrigger activates.
-//		potentialStop ();
-		transform.position += -transform.forward * currentVelocity;
 	}
 
 	//Acceleration of the Tunnels
@@ -78,16 +69,5 @@ public class Tunnel : MonoBehaviour {
 		} else {
 			transform.position += -transform.forward * currentVelocity;
 		}
-	}
-
-	//Stops Tunnel's rotation & movement if DeathTrigger activates.
-//	private void potentialStop () {
-//		if (Time.timeScale = 0) {
-//		transform.position = transform.position;
-//
-//		} else {
-//			transform.position += -transform.forward * currentSpeed;
-//		}
-//	}
-		
+	}		
 }
