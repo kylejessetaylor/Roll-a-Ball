@@ -5,8 +5,10 @@ using UnityEngine;
 public class Tunnel : DeathTrigger {
 
 	//Speed Data
-	public float speedMultiplier = 0.02f;
-	public float maxVelocity = 1.5f;
+	public float speedMultiplier = 1f;
+	public float secondSpeedMultiplier = 0.65f;
+	public float higherVelocity = 75f;
+	public float maxVelocity = 120f;
 	public float startVelocity = 0;
 	public float currentVelocity = 0;
 
@@ -50,13 +52,16 @@ public class Tunnel : DeathTrigger {
 	//Velocity of the Tunnels
 	private void marbleVelocity () {
 		if (stopTunnel == false) {
-			if (currentVelocity <= maxVelocity) {
+			if (currentVelocity < higherVelocity) {
 				currentVelocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
+			}
+			if (currentVelocity >= higherVelocity && currentVelocity < maxVelocity) {
+				currentVelocity = secondSpeedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f)+28;
 			}
 			if (currentVelocity >= maxVelocity) {
 				currentVelocity = maxVelocity;
 			}
-			transform.position += -transform.forward * currentVelocity;
+			transform.position += -transform.forward * currentVelocity * Time.deltaTime;
 		}
 	}
 
