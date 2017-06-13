@@ -11,7 +11,7 @@ public class ProceduralTrigger : MonoBehaviour {
 	//A counter for all the pieces spawned
 	public int tunnelPieceCounter = 0;
 	//Depth of each tunnel piece
-	public int depthOfTunnelPiece = 202;
+	public int depthOfTunnelPiece = 200;
 	//How many pieces we want to pull
 	public int numberOfTunnelPieces = 2;
 
@@ -28,7 +28,7 @@ public class ProceduralTrigger : MonoBehaviour {
 
 	void Update () {
 		if (buildPossible) {
-			BuildLevel ();
+			BuildLevel (tunnelPieceList [Random.Range (0, tunnelPieceList.Count)]);
 			buildPossible = false;
 		}
 	}
@@ -40,11 +40,8 @@ public class ProceduralTrigger : MonoBehaviour {
 		}
 	}
 
-	private void BuildLevel () {
-		GameObject tunnelPieceToPlace = null;
+	private void BuildLevel (GameObject tunnelPieceToPlace) {
 
-		tunnelPieceToPlace = tunnelPieceList [Random.Range (0, tunnelPieceList.Count)];
-
-		Instantiate (tunnelPieceToPlace, (Vector3.forward * depthOfTunnelPiece), Quaternion.identity);
+		GameObject newTunnel = TrashMan.spawn (tunnelPieceToPlace, (Vector3.forward * depthOfTunnelPiece), Quaternion.identity);
 	}
 }

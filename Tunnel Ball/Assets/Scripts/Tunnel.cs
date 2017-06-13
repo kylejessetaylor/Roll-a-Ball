@@ -33,9 +33,7 @@ public class Tunnel : DeathTrigger {
 
 	void Update () {
 		tunnelRotation ();
-		if (stopTunnel == false) {
-			tunnelAcceleration ();
-		}
+		tunnelAcceleration ();
 	}
 
 	//Resets Tunnel's Speed
@@ -51,18 +49,18 @@ public class Tunnel : DeathTrigger {
 
 	//Velocity of the Tunnels
 	private void marbleVelocity () {
-		if (stopTunnel == false) {
-			if (currentVelocity < higherVelocity) {
-				currentVelocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
-			}
-			if (currentVelocity >= higherVelocity && currentVelocity < maxVelocity) {
-				currentVelocity = secondSpeedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f)+28;
-			}
-			if (currentVelocity >= maxVelocity) {
-				currentVelocity = maxVelocity;
-			}
-			transform.position += -transform.forward * currentVelocity * Time.deltaTime;
+			
+		if (currentVelocity < higherVelocity) {
+			currentVelocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
 		}
+		if (currentVelocity >= higherVelocity && currentVelocity < maxVelocity) {
+			currentVelocity = secondSpeedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f)+28;
+		}
+		if (currentVelocity >= maxVelocity) {
+			currentVelocity = maxVelocity;
+		}
+
+		transform.position += -transform.forward * currentVelocity * Time.deltaTime;
 	}
 
 	//Acceleration of the Tunnels
@@ -72,7 +70,7 @@ public class Tunnel : DeathTrigger {
 			marbleVelocity ();
 			timer = Time.timeSinceLevelLoad;
 		} else {
-			transform.position += -transform.forward * currentVelocity;
+			transform.position += -transform.forward * currentVelocity * Time.deltaTime;
 		}
-	}		
+	}
 }

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+/// <summary>
+/// Manager.
+/// </summary>
 public class Manager : MonoBehaviour {
-
 
 	//Menu Buttons
 	public void PlayBtn (string startGame) {
@@ -20,21 +21,36 @@ public class Manager : MonoBehaviour {
 	}
 
 	public void RestartGame (string restartGame) {
-		//Resumes Game from "Pause" created by DeathTrigger.
-		Time.timeScale = 1;
 		//Reloads scene.
 		SceneManager.LoadScene (restartGame);
 		Cursor.visible = false;
 	}
 
-	//Spawns 1st tunnel on start
+	private void StartExitButtons () {
+		if (GameObject.FindGameObjectWithTag ("Player") == null) {
+			if (Input.GetKeyDown (KeyCode.Return)) {
+				SceneManager.LoadScene ("Tunnel");
+				Cursor.visible = false;
+			}
+			if (Input.GetKeyDown (KeyCode.Escape)) {
+				Application.Quit ();
+			}
+		}
+	}
+
+
 	public GameObject tunnelPrefab;
 
 	void Start () {
-//		GameObject tunnelPieceToPlace = null;
-//
-//		tunnelPieceToPlace = tunnel_001Prefab, [Random.Range (0, 1)];
+		BuildLevel (tunnelPrefab);
+	}
 
-		Instantiate (tunnelPrefab, (Vector3.forward * -0.24f), Quaternion.identity);
+	//Places Tunnel_001 on game start
+	private void BuildLevel (GameObject tunnelPieceToPlace) {
+		GameObject newTunnel = TrashMan.spawn (tunnelPieceToPlace, (Vector3.forward * -0.24f), Quaternion.identity);
+	}
+
+	void Update (){
+		StartExitButtons ();
 	}
 }
