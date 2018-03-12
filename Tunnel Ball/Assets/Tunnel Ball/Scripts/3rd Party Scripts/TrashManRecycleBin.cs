@@ -98,7 +98,7 @@ public sealed class TrashManRecycleBin
 
 		for( int n = 0; n < count; n++ )
 		{
-			GameObject go = GameObject.Instantiate( prefab.gameObject ) as GameObject;
+			GameObject go = GameObject.Instantiate(prefab.gameObject ) as GameObject;
 			go.name = prefab.name;
 
             if( go.transform as RectTransform )
