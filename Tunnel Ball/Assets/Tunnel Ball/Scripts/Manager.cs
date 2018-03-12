@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-/// <summary>
-/// Manager.
-/// </summary>
+
 public class Manager : MonoBehaviour {
 
 	//Menu Buttons

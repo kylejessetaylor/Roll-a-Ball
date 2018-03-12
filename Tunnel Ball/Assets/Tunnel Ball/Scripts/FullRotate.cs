@@ -8,7 +8,6 @@ public class FullRotate : MonoBehaviour {
 
 	public float maxRotateSpeed = 60;
 	public float startRotateSpeed = 25;
-	//	public float rotateSpeedMultiplier = 0.6f;
 
 	// Update is called once per frame
 	void Update () {

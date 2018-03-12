@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tunnel : DeathTrigger {
+public class Tunnel : MonoBehaviour
+{
 
 	//Speed Data
 	public float speedMultiplier = 1f;
@@ -19,7 +20,7 @@ public class Tunnel : DeathTrigger {
 	public int positionCounter = 1;
 
 	//Tunnel Rotation reader
-	protected GameObject glass;
+	protected GameObject rotator;
 
 
 	void Start () {
@@ -27,7 +28,7 @@ public class Tunnel : DeathTrigger {
 		//starts the time tracker & sets values.
 		timer = Time.timeSinceLevelLoad;
 		//Object that tunnel's rotation is read from
-		glass = GameObject.FindGameObjectWithTag ("Controls");
+		rotator = GameObject.FindGameObjectWithTag ("Controls");
 	}
 
 
@@ -44,7 +45,7 @@ public class Tunnel : DeathTrigger {
 
 	private void tunnelRotation () {
 		//Aligns all tunnel's to same rotation
-		transform.rotation = glass.transform.rotation;
+		transform.rotation = rotator.transform.rotation;
 	}
 
 	//Velocity of the Tunnels
@@ -73,4 +74,14 @@ public class Tunnel : DeathTrigger {
 			transform.position += -transform.forward * currentVelocity * Time.deltaTime;
 		}
 	}
+    #region TunnelDespawn
+    //Despawns tunnel that player has passed through and puts it back into the object pool
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.name == "Despawn Tunnel")
+        {
+            TrashMan.despawn(gameObject);
+        }
+    }
+    #endregion
 }
