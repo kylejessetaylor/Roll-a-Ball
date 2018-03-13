@@ -7,14 +7,17 @@ public class Tunnel : MonoBehaviour
 
 	//Speed Data
 	public float speedMultiplier = 1f;
-	public float secondSpeedMultiplier = 0.65f;
-	public float higherVelocity = 75f;
+	//public float secondSpeedMultiplier = 0.65f;
+	//public float higherVelocity = 75f;
 	public float maxVelocity = 120f;
 	public float startVelocity = 0;
 	public float currentVelocity = 0;
 
-	//Time
-	private float timer;
+    private bool atMaxVelocity = false;
+
+
+    //Time
+    private float timer;
 
 	//Rotation numbers
 	public int positionCounter = 1;
@@ -49,19 +52,37 @@ public class Tunnel : MonoBehaviour
 	}
 
 	//Velocity of the Tunnels
-	private void marbleVelocity () {
-			
-		if (currentVelocity < higherVelocity) {
-			currentVelocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
-		}
-		if (currentVelocity >= higherVelocity && currentVelocity < maxVelocity) {
-			currentVelocity = secondSpeedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f)+28;
-		}
-		if (currentVelocity >= maxVelocity) {
-			currentVelocity = maxVelocity;
-		}
+	private void marbleVelocity ()
+    {
 
-		transform.position += -transform.forward * currentVelocity * Time.deltaTime;
+        //Velocity, Multiple Linear Formulas
+        //if (currentVelocity < higherVelocity) {
+        //	currentVelocity = speedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f);
+        //}
+        //if (currentVelocity >= higherVelocity && currentVelocity < maxVelocity) {
+        //	currentVelocity = secondSpeedMultiplier * Mathf.Pow (Time.timeSinceLevelLoad, 1.05f)+28;
+        //}
+        //if (currentVelocity >= maxVelocity) {
+        //	currentVelocity = maxVelocity;
+        //}
+
+        //Velocity, Circular Formula
+        if (currentVelocity < maxVelocity && atMaxVelocity == false)
+        {
+            //Radius of the circle
+            float radiusSquared = Mathf.Pow(maxVelocity, 2f);
+            //Calculates y^2
+            float ySquared = radiusSquared - Mathf.Pow(Time.timeSinceLevelLoad - maxVelocity, 2f);
+            //Current Velocity with multiplier (increasing multiplier increases rate of speed);
+            currentVelocity = speedMultiplier * 0.1f * ySquared;
+        }
+        else
+        {
+            atMaxVelocity = true;
+            currentVelocity = maxVelocity;
+        }
+
+        transform.position += -transform.forward * currentVelocity * Time.deltaTime;
 	}
 
 	//Acceleration of the Tunnels

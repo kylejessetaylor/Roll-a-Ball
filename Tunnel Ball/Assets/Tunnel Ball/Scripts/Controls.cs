@@ -41,8 +41,21 @@ public class Controls : MonoBehaviour {
 		transform.rotation = Quaternion.Slerp (transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 	}
 
-	//Turns on Player Corpse when death trigger activates
-	private void PlayerCorpse () {
+    //Turn Functions
+    public void TurnRight()
+    {
+        //Sets new targetRotation
+        targetRotation *= Quaternion.AngleAxis(45, Vector3.back);
+    }
+
+    public void TurnLeft()
+    {
+        //Sets new targetRotation
+        targetRotation *= Quaternion.AngleAxis(45, Vector3.forward);
+    }
+
+    //Turns on Player Corpse when death trigger activates
+    private void PlayerCorpse () {
 		if (player == null) {
             //Stops multiple shards spawning
             bool shardSpawned = false;

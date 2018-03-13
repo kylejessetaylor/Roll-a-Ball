@@ -45,7 +45,8 @@ public class Manager : MonoBehaviour {
 
 	//Places Tunnel_001 on game start
 	private void BuildLevel (GameObject tunnelPieceToPlace) {
-		GameObject newTunnel = TrashMan.spawn (tunnelPieceToPlace, (Vector3.forward * -0.24f), Quaternion.identity);
+		//GameObject newTunnel =
+            TrashMan.spawn (tunnelPieceToPlace, (Vector3.forward * -0.24f), Quaternion.identity);
 	}
 
 	void Update (){

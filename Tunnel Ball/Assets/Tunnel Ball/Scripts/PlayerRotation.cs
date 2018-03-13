@@ -111,9 +111,14 @@ public class PlayerRotation : MonoBehaviour {
     #region DeathTrigger
 
     [Header("Death Trigger")]
-    //On & Off UI
+    //Marble Shards
     public GameObject deadPlayer;
+    private Rigidbody rb;
+    public float forceMultiplier = 20f;
+    private float thrust;
+    private bool force = true;
 
+    //On & Off UI
     [SerializeField] private GameObject inGameUI;
     [SerializeField] private GameObject deathUI;
 
@@ -131,7 +136,10 @@ public class PlayerRotation : MonoBehaviour {
     {
         tunnels = GameObject.FindGameObjectsWithTag("Tunnels");
         if (other.tag == "Obstacle")
-        {      
+        {
+            //Tells how long play session was
+            Debug.Log(Time.timeSinceLevelLoad);
+
             //Turns restart UI on
             inGameUI.gameObject.SetActive(false);
             deathUI.SetActive(true);
@@ -146,8 +154,25 @@ public class PlayerRotation : MonoBehaviour {
 
             //Turns off Player
             gameObject.SetActive(false);
-            Instantiate(deadPlayer);
+            GameObject marbleShards = Instantiate(deadPlayer);
+            for(int i = 0; i <= marbleShards.transform.childCount; i++)
+            {
+                //Applies force to each child of Marble Shard Parent
+                GameObject shard = marbleShards.transform.GetChild(i).gameObject;
+                PlayerCorpseImpulse(shard);
+                i++;
+                Debug.Log(marbleShards.transform.childCount);
+            }
+            
         }
+    }
+
+    private void PlayerCorpseImpulse(GameObject shard)
+    {
+        thrust = forceMultiplier * Time.timeSinceLevelLoad * Time.deltaTime;
+        rb = shard.transform.GetComponent<Rigidbody>();
+        rb.AddForce(0f, 0f, thrust, ForceMode.Impulse);
+        force = false;
     }
 
     #endregion
