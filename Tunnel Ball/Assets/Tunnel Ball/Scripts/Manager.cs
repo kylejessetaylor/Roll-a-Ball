@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
-public class Manager : MonoBehaviour {
+public class Manager : MenuButtons {
 
     [Header("Game Setup")]
 	public GameObject firstTunnel;
@@ -20,8 +19,6 @@ public class Manager : MonoBehaviour {
     }
 
 	void Update (){
-		StartExitButtons ();
-
         //Updates Score
         if (stopScore == false)
         {
@@ -29,50 +26,13 @@ public class Manager : MonoBehaviour {
         }
     }
 
-    #region FirstTunnel+Buttons
+    #region FirstTunnel
 
     //Places Tunnel_001 on game start
     private void BuildLevel(GameObject tunnelPieceToPlace)
     {
         //GameObject newTunnel =
         TrashMan.spawn(tunnelPieceToPlace, (Vector3.forward * -0.24f), Quaternion.identity);
-    }
-
-    //Menu Buttons
-    public void PlayBtn(string startGame)
-    {
-        //Loads a scene.
-        SceneManager.LoadScene(startGame);
-        Cursor.visible = false;
-    }
-
-    public void ExitGameBtn()
-    {
-        //Exits Game.
-        Application.Quit();
-    }
-
-    public void RestartGame(string restartGame)
-    {
-        //Reloads scene.
-        SceneManager.LoadScene(restartGame);
-        Cursor.visible = false;
-    }
-
-    private void StartExitButtons()
-    {
-        if (GameObject.FindGameObjectWithTag("Player") == null)
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                SceneManager.LoadScene("Tunnel");
-                Cursor.visible = false;
-            }
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Application.Quit();
-            }
-        }
     }
     #endregion
 
@@ -132,7 +92,7 @@ public class Manager : MonoBehaviour {
         highScore.text = "Highscore: " + ((int)PlayerPrefs.GetFloat("Highscore")).ToString();
 
         //Stops numbers from continuing to calculate after death
-        this.gameObject.GetComponent<Score>().enabled = false;
+        //this.gameObject.GetComponent<Score>().enabled = false;
     }
 
     //Saves new Highscore

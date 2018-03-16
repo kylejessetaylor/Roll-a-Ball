@@ -7,7 +7,9 @@ public class PlayerRotation : MonoBehaviour {
     void Start()
     {
         //Marble Rotation
-        targetRotation = transform.rotation;
+        //targetRotation = transform.rotation;
+        maxVelocity = 100;
+        speedMultiplier = 0.15f;
     }
 
     void Update()
@@ -32,7 +34,11 @@ public class PlayerRotation : MonoBehaviour {
 	float tractionSpeed;
 	float timer;
 	public float rotationCap = 40;
-	private Quaternion targetRotation;
+	//private Quaternion targetRotation;
+
+    //Circle Rotation Variables
+    private float maxVelocity;
+    private float speedMultiplier;
 
     private void RotatingMarble()
     {
@@ -44,8 +50,17 @@ public class PlayerRotation : MonoBehaviour {
             timer = rotationCap;
         }
 
-        //Marble rotation that increases on change in time.
-        tractionSpeed = rotateSpeed * timer * Time.deltaTime;
+
+        //tractionSpeed = rotateSpeed * timer * Time.deltaTime;
+
+        ///Marble rotation that increases on change in time.
+        //Radius of the circle
+        float radiusSquared = Mathf.Pow(maxVelocity, 2f);
+        //Calculates y^2
+        float ySquared = radiusSquared - Mathf.Pow(Time.timeSinceLevelLoad - maxVelocity, 2f);
+        //Current Velocity with multiplier (increasing multiplier increases rate of speed);
+        tractionSpeed = (speedMultiplier * 0.1f * ySquared)/rotateSpeed;
+
         transform.Rotate(new Vector3(tractionSpeed, 0, 0));
     }
     #endregion
@@ -138,10 +153,10 @@ public class PlayerRotation : MonoBehaviour {
         if (other.tag == "Obstacle")
         {
             //Tells how long play session was
-            Debug.Log(Time.timeSinceLevelLoad);
+            Debug.Log("Player lasted " + Time.timeSinceLevelLoad + " seconds.");
 
             //Turns restart UI on
-            inGameUI.gameObject.SetActive(false);
+            inGameUI.SetActive(false);
             deathUI.SetActive(true);
 
             //Deactivates Tunnel movement
@@ -154,16 +169,18 @@ public class PlayerRotation : MonoBehaviour {
 
             //Turns off Player
             gameObject.SetActive(false);
+            //Spawns Shards
             GameObject marbleShards = Instantiate(deadPlayer);
-            for(int i = 0; i <= marbleShards.transform.childCount; i++)
+            marbleShards.transform.position = transform.position;
+            //Single force to all shards
+            force = false;
+            for (int i = 0; i <= marbleShards.transform.childCount; i++)
             {
                 //Applies force to each child of Marble Shard Parent
                 GameObject shard = marbleShards.transform.GetChild(i).gameObject;
                 PlayerCorpseImpulse(shard);
                 i++;
-                Debug.Log(marbleShards.transform.childCount);
             }
-            
         }
     }
 
@@ -172,7 +189,6 @@ public class PlayerRotation : MonoBehaviour {
         thrust = forceMultiplier * Time.timeSinceLevelLoad * Time.deltaTime;
         rb = shard.transform.GetComponent<Rigidbody>();
         rb.AddForce(0f, 0f, thrust, ForceMode.Impulse);
-        force = false;
     }
 
     #endregion
