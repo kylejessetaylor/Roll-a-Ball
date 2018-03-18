@@ -13,7 +13,7 @@ public class Controls : MonoBehaviour {
     private GameObject player;
 
 	void Start () {
-		targetRotation = transform.rotation;
+        targetRotation = transform.rotation;
 		corpse = GameObject.FindGameObjectWithTag ("Corpse");
         //Finds Player
         player = GameObject.FindGameObjectWithTag("Player");
@@ -30,11 +30,11 @@ public class Controls : MonoBehaviour {
 	private void tunnelRotation () {
         ///Right Turn ---------------------------------------------------------------
 		if (Input.GetKeyDown (KeyCode.RightArrow) || Input.GetKeyDown (KeyCode.D)) {
-				targetRotation *= Quaternion.AngleAxis (45, Vector3.back);
+                TurnRight();
 			}
         ///Left Turn ----------------------------------------------------------------
 		if (Input.GetKeyDown (KeyCode.LeftArrow) || Input.GetKeyDown (KeyCode.A)) {
-				targetRotation *= Quaternion.AngleAxis (45, Vector3.forward);
+                TurnLeft();
 			}
 
         //Smooth Rotation
@@ -46,6 +46,11 @@ public class Controls : MonoBehaviour {
     {
         //Sets new targetRotation
         targetRotation *= Quaternion.AngleAxis(45, Vector3.back);
+
+        ////SideRotation
+        //float pongRate = 10f;
+        //Quaternion sideRotation = Quaternion.AngleAxis(10f, Vector3.up * Mathf.PingPong(10f, pongRate * Time.deltaTime));
+        //player.transform.rotation = Quaternion.Slerp (transform.rotation, sideRotation, Time.deltaTime * rotationSpeed);
     }
 
     public void TurnLeft()
