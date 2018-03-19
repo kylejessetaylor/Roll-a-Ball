@@ -53,10 +53,13 @@ public class Manager : MenuButtons {
 
     public void CurrentScore()
     {
-        //Score calculator
-        scorez = scoremultiplier * Mathf.Pow(Time.timeSinceLevelLoad, 1.5f);
-        score.text = "Score: " + Mathf.Round(scorez);
-
+        //Stops score going up after death
+        if (GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            //Score calculator
+            scorez = scoremultiplier * Mathf.Pow(Time.timeSinceLevelLoad, 1.5f);
+            score.text = "Score: " + Mathf.Round(scorez);
+        }
         //Shows player's current score that round
         if (scorez <= currentHighScore && (GameObject.FindGameObjectWithTag("Player") == null))
         {
@@ -101,7 +104,7 @@ public class Manager : MenuButtons {
         PlayerPrefs.SetFloat("Highscore", Mathf.Round(scorez));
     }
 
-    //	private void FunnyText (Text textChange) {
+    //	private Text FunnyText (Text textChange) {
     //
     //	}
 
