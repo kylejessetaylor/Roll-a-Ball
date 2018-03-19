@@ -10,6 +10,8 @@ public class Player : MonoBehaviour {
         //targetRotation = transform.rotation;
         maxVelocity = 100;
         speedMultiplier = 0.15f;
+
+        
     }
 
     void Update()
@@ -66,6 +68,7 @@ public class Player : MonoBehaviour {
     #endregion
 
     #region InstantiateTrigger
+
     [Header("Tunnel Instantiation")]
     public List<GameObject> tunnelPieceList = new List<GameObject>();
 
@@ -120,7 +123,16 @@ public class Player : MonoBehaviour {
     public void BuildLevel(GameObject tunnelPieceToPlace)
     {
         GameObject newTunnel = TrashMan.spawn(tunnelPieceToPlace, (Vector3.forward * depthOfTunnelPiece), Quaternion.identity);
+
+        //GameObject trashMan = GameObject.FindGameObjectWithTag("Tunnel Pool");
+        ////Assign prefab lightmap index to the instantiated one
+        ////Renderer piecer = newTunnel.GetComponent<Renderer>();
+        //Renderer piecer = trashMan.GetComponent<TrashMan>().r;
+        //piecer.lightmapIndex = trashMan.GetComponent<TrashMan>().lightmapIndex;
+        //piecer.lightmapScaleOffset = trashMan.GetComponent<TrashMan>().lightmapScaleOffset;
+
     }
+
     #endregion
 
     #region DeathTrigger

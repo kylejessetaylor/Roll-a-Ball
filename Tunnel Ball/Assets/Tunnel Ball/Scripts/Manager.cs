@@ -23,8 +23,27 @@ public class Manager : MenuButtons {
         if (stopScore == false)
         {
             CurrentScore();
+
+            //FPS
+            FrameRate();
         }
     }
+
+    #region FrameRate
+
+    [Header("FrameRate")]
+    public Text frameRate;
+    private float currentFPS;
+    private float averageFPS;
+    private float lowestFPS;
+
+    private void FrameRate()
+    {
+        
+    }
+
+
+    #endregion
 
     #region FirstTunnel
 

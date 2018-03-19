@@ -15,7 +15,6 @@ public class Tunnel : MonoBehaviour
 
     private bool atMaxVelocity = false;
 
-
     //Time
     private float timer;
 

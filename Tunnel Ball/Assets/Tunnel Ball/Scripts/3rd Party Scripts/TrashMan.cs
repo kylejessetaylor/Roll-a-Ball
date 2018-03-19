@@ -7,10 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class TrashMan : MonoBehaviour
 {
-	/// <summary>
-	/// access to the singleton
-	/// </summary>
-	public static TrashMan instance;
+
+    /// <summary>
+    /// access to the singleton
+    /// </summary>
+    public static TrashMan instance;
 
 	/// <summary>
 	/// stores the recycle bins and is used to populate the lookup Dictionaries at startup
@@ -43,10 +44,9 @@ public class TrashMan : MonoBehaviour
 	[HideInInspector]
 	public new Transform transform;
 
+    #region MonoBehaviour
 
-	#region MonoBehaviour
-
-	void Awake()
+    void Awake()
 	{
 		if( instance != null )
 		{
@@ -139,9 +139,9 @@ public class TrashMan : MonoBehaviour
 	{
 		if( instance._instanceIdToRecycleBin.ContainsKey( gameObjectInstanceId ) )
 		{
-			var newGo = instance._instanceIdToRecycleBin[gameObjectInstanceId].spawn();
+            var newGo = instance._instanceIdToRecycleBin[gameObjectInstanceId].spawn();
 
-			if( newGo != null )
+            if ( newGo != null )
 			{
 				var newTransform = newGo.transform;
 
@@ -220,16 +220,19 @@ public class TrashMan : MonoBehaviour
 	}
 
 
-	/// <summary>
-	/// pulls an object out of the recycle bin
-	/// </summary>
-	/// <param name="go">Go.</param>
-	public static GameObject spawn( GameObject go, Vector3 position = default( Vector3 ), Quaternion rotation = default( Quaternion ) )
+    /// <summary>
+    /// pulls an object out of the recycle bin
+    /// </summary>
+    /// <param name="go">Go.</param>
+    //public static GameObject spawn( GameObject go, Vector3 position = default( Vector3 ), Quaternion rotation = default( Quaternion ) )
+
+    public static GameObject spawn( GameObject go, Vector3 position = default( Vector3 ), Quaternion rotation = default( Quaternion ))
 	{
 		if( instance._instanceIdToRecycleBin.ContainsKey( go.GetInstanceID() ) )
 		{
-			return spawn( go.GetInstanceID(), position, rotation );
-		}
+            //Old spawn (do not delete)
+            return spawn( go.GetInstanceID(), position, rotation);
+        }
 		else
 		{
 			Debug.LogWarning( "attempted to spawn go (" + go.name + ") but there is no recycle bin setup for it. Falling back to Instantiate" );
