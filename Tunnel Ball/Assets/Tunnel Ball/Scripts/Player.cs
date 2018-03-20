@@ -7,11 +7,11 @@ public class Player : MonoBehaviour {
     void Start()
     {
         //Marble Rotation
-        //targetRotation = transform.rotation;
         maxVelocity = 100;
         speedMultiplier = 0.15f;
 
-        
+        //Tunnel Spawns
+        lastTunnel = "Tunnel_001";
     }
 
     void Update()
@@ -33,7 +33,8 @@ public class Player : MonoBehaviour {
     #region Player Rotation
     [Header("Player Rotation")]
     public float rotateSpeed = 40f;
-	float tractionSpeed;
+    public float startSpeed;
+    float tractionSpeed;
 	float timer;
 	public float rotationCap = 40;
 	//private Quaternion targetRotation;
@@ -61,7 +62,7 @@ public class Player : MonoBehaviour {
         //Calculates y^2
         float ySquared = radiusSquared - Mathf.Pow(Time.timeSinceLevelLoad - maxVelocity, 2f);
         //Current Velocity with multiplier (increasing multiplier increases rate of speed);
-        tractionSpeed = (speedMultiplier * 0.1f * ySquared)/rotateSpeed;
+        tractionSpeed = (speedMultiplier * 0.1f * ySquared)/rotateSpeed + startSpeed;
 
         transform.Rotate(new Vector3(tractionSpeed, 0, 0));
     }
@@ -84,32 +85,23 @@ public class Player : MonoBehaviour {
     public float playerPositionCounter = 0;
 
     //Records last tunnel spawned
-    private GameObject lastTunnel;
+    //[HideInInspector]
+    public string lastTunnel;
 
-    private void DifferentTunnel(Collider other)
+    void DifferentTunnel(Collider other)
     {
         if (other.tag == "Trigger") {
             GameObject newTunnel = tunnelPieceList[Random.Range(0, tunnelPieceList.Count)];
 
             //Allows Spawn
-            //Debug for first tunnel spawn
-            if (lastTunnel == null)
-            {
-                lastTunnel = newTunnel;
-
-                //Builds Tunnel
-                BuildLevel(newTunnel);
-
-                return;
-            }
             //Pick another Tunnel
-            else if (lastTunnel.name == newTunnel.name)
+            if (lastTunnel == newTunnel.name)
             {
                 DifferentTunnel(other);
             }
             else
             {
-                lastTunnel = newTunnel;
+                lastTunnel = newTunnel.name;
 
                 //Builds Tunnel
                 BuildLevel(newTunnel);
@@ -122,15 +114,7 @@ public class Player : MonoBehaviour {
 
     public void BuildLevel(GameObject tunnelPieceToPlace)
     {
-        GameObject newTunnel = TrashMan.spawn(tunnelPieceToPlace, (Vector3.forward * depthOfTunnelPiece), Quaternion.identity);
-
-        //GameObject trashMan = GameObject.FindGameObjectWithTag("Tunnel Pool");
-        ////Assign prefab lightmap index to the instantiated one
-        ////Renderer piecer = newTunnel.GetComponent<Renderer>();
-        //Renderer piecer = trashMan.GetComponent<TrashMan>().r;
-        //piecer.lightmapIndex = trashMan.GetComponent<TrashMan>().lightmapIndex;
-        //piecer.lightmapScaleOffset = trashMan.GetComponent<TrashMan>().lightmapScaleOffset;
-
+        TrashMan.spawn(tunnelPieceToPlace, (Vector3.forward * depthOfTunnelPiece), Quaternion.identity);
     }
 
     #endregion
@@ -151,7 +135,6 @@ public class Player : MonoBehaviour {
 
     //Object that Tunnel's read rotation off & tunnel movement.
     private GameObject controller;
-    private GameObject[] tunnels;
 
     void Awake()
     {
@@ -161,7 +144,7 @@ public class Player : MonoBehaviour {
     //Turns off Ball & Tunnel Movement
     void DeathTrigger(Collider other)
     {
-        tunnels = GameObject.FindGameObjectsWithTag("Tunnels");
+        GameObject[] tunnels = GameObject.FindGameObjectsWithTag("Tunnels");
         if (other.tag == "Obstacle")
         {
             //Tells how long play session was

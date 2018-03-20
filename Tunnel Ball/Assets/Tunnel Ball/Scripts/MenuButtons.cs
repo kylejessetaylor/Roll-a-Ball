@@ -7,10 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class MenuButtons : MonoBehaviour {
 
-    private void Update()
+    void Update()
     {
         PlayerDeathHotkeys();
-
     }
 
     #region Buttons
@@ -41,7 +40,7 @@ public class MenuButtons : MonoBehaviour {
     #region Hotkeys
 
     //Can use Enter & Esc to navigate menu
-    private void PlayerDeathHotkeys()
+    public void PlayerDeathHotkeys()
     {
         if (GameObject.FindGameObjectWithTag("Player") == null)
         {
@@ -53,6 +52,7 @@ public class MenuButtons : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Application.Quit();
+                Debug.Log("Hit Esc");
             }
         }
     }

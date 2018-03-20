@@ -27,6 +27,8 @@ public class Manager : MenuButtons {
             //FPS
             FrameRate();
         }
+
+        PlayerDeathHotkeys();
     }
 
     #region FrameRate
