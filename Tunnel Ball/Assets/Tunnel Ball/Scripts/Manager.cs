@@ -14,7 +14,7 @@ public class Manager : MenuButtons {
 
         //Loads in the current highscore into the game on launch
         currentHighScore = PlayerPrefs.GetFloat("Highscore");
-        highScore.text = "Highscore: " + PlayerPrefs.GetFloat("Highscore");
+        highScore.text = "Highscore:  " + PlayerPrefs.GetFloat("Highscore");
         stopScore = false;
     }
 
@@ -79,7 +79,8 @@ public class Manager : MenuButtons {
         {
             //Score calculator
             scorez = scoremultiplier * Mathf.Pow(Time.timeSinceLevelLoad, 1.5f);
-            score.text = "Score: " + Mathf.Round(scorez);
+            //Score Text
+            score.text = "Score:  " + Mathf.Round(scorez);
         }
         //Shows player's current score that round
         if (scorez <= currentHighScore && (GameObject.FindGameObjectWithTag("Player") == null))
@@ -109,11 +110,11 @@ public class Manager : MenuButtons {
     //Updates and Shows Highscore on Endgame screne
     public void NewHighScore()
     {
-        finalScore.text = "Your Highscore: " + Mathf.Round(scorez);
+        finalScore.text = "Your Highscore:  " + Mathf.Round(scorez);
         whoops.text = "New Highscore!";
 
         //Loads the new highscore into the highscore text
-        highScore.text = "Highscore: " + ((int)PlayerPrefs.GetFloat("Highscore")).ToString();
+        highScore.text = "Highscore:  " + ((int)PlayerPrefs.GetFloat("Highscore")).ToString();
 
         //Stops numbers from continuing to calculate after death
         //this.gameObject.GetComponent<Score>().enabled = false;
