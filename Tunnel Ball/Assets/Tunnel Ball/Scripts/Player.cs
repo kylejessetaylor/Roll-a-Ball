@@ -80,13 +80,14 @@ public class Player : MonoBehaviour {
     //Depth of each tunnel piece
     public int depthOfTunnelPiece = 200;
     //How many pieces we want to pull
+    [HideInInspector]
     public int numberOfTunnelPieces = 2;
 
     public float playerPositionCounter = 0;
 
     //Records last tunnel spawned
     //[HideInInspector]
-    public string lastTunnel;
+    private string lastTunnel;
 
     void DifferentTunnel(Collider other)
     {
