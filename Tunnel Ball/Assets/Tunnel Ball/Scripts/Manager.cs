@@ -9,8 +9,12 @@ public class Manager : MenuButtons {
 	public GameObject firstTunnel;
 
 	void Start () {
+        //TEST DELETE ME
+       // PlayerPrefs.SetFloat("Highscore", 0);
+        //TEST DELETE ME
+
         //Builds First Tunnel
-		BuildLevel (firstTunnel);
+        BuildLevel (firstTunnel);
 
         //Loads in the current highscore into the game on launch
         currentHighScore = PlayerPrefs.GetFloat("Highscore");
@@ -60,10 +64,19 @@ public class Manager : MenuButtons {
     #region Score
 
     [Header("Score")]
+    //In Game UI
     public Text score;
     public Text highScore;
+
+    ///Dead UI
+    //For YourScore only
     public Text finalScore;
+    public Text deadHighScore;
+    //For NewHighScore only
+    public Text newHighScore;
+
     public Text whoops;
+
 
     public float scoremultiplier = 0.2f;
     protected float endScore;
@@ -95,11 +108,19 @@ public class Manager : MenuButtons {
         }
     }
 
-    //Shows Score on Endgame screne
+    //Shows Score on Endgame screen
     public void YourScore()
     {
-        finalScore.text = "Your Score: " + Mathf.Round(scorez);
+        //Enalbes & Disables appropriate text objects
+        newHighScore.transform.gameObject.SetActive(false);
+
+        finalScore.transform.gameObject.SetActive(true);
+        deadHighScore.transform.gameObject.SetActive(true);
+
         whoops.text = "Whoops!";
+        //Applies score to text
+        finalScore.text = "Your Score: " + Mathf.Round(scorez);
+        deadHighScore.text = "Highscore: " + ((int)PlayerPrefs.GetFloat("Highscore")).ToString();
 
         //textChange [Random.Range (0, textList.Count)]
 
@@ -107,17 +128,18 @@ public class Manager : MenuButtons {
         stopScore = true;
     }
 
-    //Updates and Shows Highscore on Endgame screne
+    //Updates and Shows Highscore on Endgame screen
     public void NewHighScore()
     {
-        finalScore.text = "Your Highscore:  " + Mathf.Round(scorez);
+        //Enalbes & Disables appropriate text objects
+        finalScore.transform.gameObject.SetActive(false);
+        deadHighScore.transform.gameObject.SetActive(false);
+
+        newHighScore.transform.gameObject.SetActive(true);
+
         whoops.text = "New Highscore!";
-
-        //Loads the new highscore into the highscore text
-        highScore.text = "Highscore:  " + ((int)PlayerPrefs.GetFloat("Highscore")).ToString();
-
-        //Stops numbers from continuing to calculate after death
-        //this.gameObject.GetComponent<Score>().enabled = false;
+        ////Applies score to text
+        newHighScore.text = "Your Highscore: " + Mathf.Round(scorez);
     }
 
     //Saves new Highscore
