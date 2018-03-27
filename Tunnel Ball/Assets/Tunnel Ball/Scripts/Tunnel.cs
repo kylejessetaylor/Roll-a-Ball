@@ -24,8 +24,7 @@ public class Tunnel : MonoBehaviour
 	//Tunnel Rotation reader
 	protected GameObject rotator;
 
-
-	void Start () {
+    void Start () {
 		ResetTunnel ();
 		//starts the time tracker & sets values.
 		timer = Time.timeSinceLevelLoad;
@@ -37,7 +36,7 @@ public class Tunnel : MonoBehaviour
 	void Update () {
 		TunnelRotation ();
 		TunnelAcceleration ();
-	}
+    }
 
 	//Resets Tunnel's Speed
 	private void ResetTunnel () {
@@ -68,7 +67,7 @@ public class Tunnel : MonoBehaviour
             atMaxVelocity = true;
             currentVelocity = maxVelocity;
         }
-
+        //Transform Forward
         transform.position += -transform.forward * currentVelocity * Time.deltaTime;
 	}
 
@@ -93,5 +92,4 @@ public class Tunnel : MonoBehaviour
         }
     }
     #endregion
-
 }

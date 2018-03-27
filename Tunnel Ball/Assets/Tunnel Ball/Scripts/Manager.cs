@@ -10,7 +10,7 @@ public class Manager : MenuButtons {
 
 	void Start () {
         //TEST DELETE ME
-       // PlayerPrefs.SetFloat("Highscore", 0);
+        //PlayerPrefs.SetFloat("Highscore", 0);
         //TEST DELETE ME
 
         //Builds First Tunnel
@@ -20,9 +20,12 @@ public class Manager : MenuButtons {
         currentHighScore = PlayerPrefs.GetFloat("Highscore");
         highScore.text = "Highscore:  " + PlayerPrefs.GetFloat("Highscore");
         stopScore = false;
+
+        //Fog
+        //InvokeRepeating("FogUpdate", 1f, 1f);
     }
 
-	void Update (){
+    void Update (){
         //Updates Score
         if (stopScore == false)
         {
@@ -34,6 +37,36 @@ public class Manager : MenuButtons {
 
         PlayerDeathHotkeys();
     }
+
+    #region Fog
+
+    ////Fog
+    //[Header("Fog")]
+    //public float maxFog = 0.02f;
+    //public float minFog = 0.015f;
+    //public float fogRate = 1f;
+
+    //void FogUpdate()
+    //{
+    //    ////Fog Density based on Velocity
+    //    //RenderSettings.fogDensity = Mathf.Lerp(maxFog, minFog, fogRate * Time.deltaTime);
+    //}
+
+    //void FogFading()
+    //{
+    //    StartCoroutine("FogFadingCoroutine");
+    //}
+
+    //IEnumerable FogFadingCoroutine()
+    //{
+    //    do
+    //    {
+    //        RenderSettings.fogDensity -= fogRate * Time.deltaTime;
+    //        return yield null;
+    //    } while (RenderSettings.fogDensity > minFog);
+    //}
+
+    #endregion
 
     #region FrameRate
 

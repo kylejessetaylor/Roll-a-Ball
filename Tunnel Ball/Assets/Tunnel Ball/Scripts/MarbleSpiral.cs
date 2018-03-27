@@ -15,7 +15,8 @@ public class MarbleSpiral : MonoBehaviour {
     private float timer;
 
     [Header("Face Center")]
-    private bool startButtonPressed;
+    [HideInInspector]
+    public bool startButtonPressed;
     private Vector3 direction;
     public GameObject centerLocation;
     public float moveSpeed;
@@ -48,11 +49,6 @@ public class MarbleSpiral : MonoBehaviour {
             return;
         }
 	}
-
-    public void StartGame()
-    {
-        startButtonPressed = true;
-    }
 
     private void SpiralPosition()
     {
