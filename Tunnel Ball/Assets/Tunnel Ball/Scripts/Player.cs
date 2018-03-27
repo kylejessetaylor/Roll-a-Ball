@@ -128,6 +128,7 @@ public class Player : MonoBehaviour {
     public GameObject deadPlayer;
     private Rigidbody rb;
     public float forceMultiplier = 20f;
+    public float heightThrust;
     private float thrust;
     private bool force = true;
 
@@ -185,7 +186,8 @@ public class Player : MonoBehaviour {
     {
         thrust = forceMultiplier * Time.timeSinceLevelLoad * Time.deltaTime;
         rb = shard.transform.GetComponent<Rigidbody>();
-        rb.AddForce(0f, 0f, thrust, ForceMode.Impulse);
+        rb.AddForce(0f, heightThrust, 0, ForceMode.Impulse);
+        rb.AddForce(0, 0, thrust + heightThrust, ForceMode.VelocityChange);
     }
 
     #endregion

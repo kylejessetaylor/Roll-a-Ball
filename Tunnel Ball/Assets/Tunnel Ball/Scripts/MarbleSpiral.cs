@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MarbleSpiral : MonoBehaviour {
 
+    public GameObject buttonManager;
+
     [Header("Position")]
     public float circleWidth = 9.25f;
     public float lerpTime = 0.2f;
@@ -12,10 +14,45 @@ public class MarbleSpiral : MonoBehaviour {
     private float centeredPrct;
     private float timer;
 
-	// Update is called once per frame
-	void Update () {
-        SpiralPosition();
+    [Header("Face Center")]
+    private bool startButtonPressed;
+    private Vector3 direction;
+    public GameObject centerLocation;
+    public float moveSpeed;
+    public float maxSpeed;
+    public float faceSpeed;
+
+    // Update is called once per frame
+    void Update () {
+        //Stops function from occuring if user presses start button
+        if (startButtonPressed == false)
+        {
+            SpiralPosition();
+        }
+        //Move To Center
+        else if (transform.GetComponent<Rigidbody>().useGravity == false)
+        {
+            //Look at Center
+            Vector3 direction = centerLocation.transform.position - transform.position;
+            Quaternion toRotation = Quaternion.FromToRotation(transform.forward, direction);
+            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, faceSpeed);
+
+            //Direct Movement to Center
+            Rigidbody rb = GetComponent<Rigidbody>();
+            Vector3 currentVelocity = rb.velocity;
+            rb.AddForce(direction*moveSpeed, ForceMode.Impulse);
+        }
+        //Fall down tunnel
+        else
+        {
+            return;
+        }
 	}
+
+    public void StartGame()
+    {
+        startButtonPressed = true;
+    }
 
     private void SpiralPosition()
     {
@@ -35,5 +72,21 @@ public class MarbleSpiral : MonoBehaviour {
 
         //Face movement direction
         transform.rotation = Quaternion.LookRotation(movement);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other.name);
+        //Turns on Gravity
+        if (other.name == "FallTrigger")
+        {
+            transform.GetComponent<Rigidbody>().useGravity = true;
+        }
+
+        //Changes Scene
+        if (other.name == "SceneChange")
+        {
+            buttonManager.GetComponent<MenuButtons>().PlayBtn("Tunnel");
+        }
     }
 }
