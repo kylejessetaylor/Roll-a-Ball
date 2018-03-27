@@ -117,7 +117,7 @@ public class Manager : MenuButtons {
         finalScore.transform.gameObject.SetActive(true);
         deadHighScore.transform.gameObject.SetActive(true);
 
-        whoops.text = "Whoops!";
+        whoops.text = "";
         //Applies score to text
         finalScore.text = "Your Score: " + Mathf.Round(scorez);
         deadHighScore.text = "Highscore: " + ((int)PlayerPrefs.GetFloat("Highscore")).ToString();
@@ -137,7 +137,7 @@ public class Manager : MenuButtons {
 
         newHighScore.transform.gameObject.SetActive(true);
 
-        whoops.text = "New Highscore!";
+        whoops.text = "Highscore!";
         ////Applies score to text
         newHighScore.text = "Your Highscore: " + Mathf.Round(scorez);
     }
