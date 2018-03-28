@@ -12,6 +12,9 @@ public class MenuButtons : MonoBehaviour {
     public GameObject uiPannel;
     public float fadeRate;
 
+    [Header("Audio")]
+    public GameObject audioManager;
+
     private bool gameStarted;
 
     void Update()
@@ -38,14 +41,28 @@ public class MenuButtons : MonoBehaviour {
     {
         //Exits Game.
         Application.Quit();
+        audioManager.GetComponent<AudioSource>().Play();
     }
 
     public void RestartGame(string restartGame)
     {
+        //Audio Sound
+        audioManager.GetComponent<AudioSource>().Play();
+
+        //Reloads scene.
+        StartCoroutine(ExecuteAfterTime(0.2f, restartGame));
+    }
+
+    IEnumerator ExecuteAfterTime(float time, string restartGame)
+    {
+        //suspend execution for X seconds
+        yield return new WaitForSeconds(time);
+
         //Reloads scene.
         SceneManager.LoadScene(restartGame);
         Cursor.visible = false;
     }
+
 
     #endregion
 
@@ -58,8 +75,7 @@ public class MenuButtons : MonoBehaviour {
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                SceneManager.LoadScene("Tunnel");
-                Cursor.visible = false;
+                RestartGame("Tunnel");
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -76,6 +92,7 @@ public class MenuButtons : MonoBehaviour {
     {
         player.transform.GetComponent<MarbleSpiral>().startButtonPressed = true;
         gameStarted = true;
+        audioManager.GetComponent<AudioSource>().Play();
     }
 
     //Fades out menu
