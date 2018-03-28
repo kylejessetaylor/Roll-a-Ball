@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 
 
@@ -86,13 +87,13 @@ public class MenuButtons : MonoBehaviour {
         uiPannel.transform.GetChild(0).GetComponent<Image>().color = colorButton;
 
         //Button Text
-        Color colorButtonText = uiPannel.transform.GetChild(0).GetChild(0).GetComponent<Text>().color;
+        Color colorButtonText = uiPannel.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().color;
         colorButtonText.a -= fadeRate * Time.deltaTime;
-        uiPannel.transform.GetChild(0).GetChild(0).GetComponent<Text>().color = colorButtonText;
+        uiPannel.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().color = colorButtonText;
 
         //Title
-        Color colorTitle = uiPannel.transform.GetChild(1).GetComponent<Text>().color;
+        Color colorTitle = uiPannel.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color;
         colorTitle.a -= fadeRate * Time.deltaTime;
-        uiPannel.transform.GetChild(1).GetComponent<Text>().color = colorTitle;
+        uiPannel.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = colorTitle;
     }
 }

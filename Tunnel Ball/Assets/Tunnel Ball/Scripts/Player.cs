@@ -28,7 +28,7 @@ public class Player : MonoBehaviour {
 
     /// <summary>
     /// Functions
-    /// </summary>
+    /// </summary> 
 
     #region Player Rotation
 
@@ -132,9 +132,9 @@ public class Player : MonoBehaviour {
     private float thrust;
     private bool force = true;
 
-    //On & Off UI
-    [SerializeField] private GameObject inGameUI;
-    [SerializeField] private GameObject deathUI;
+    ////On & Off UI
+    //[SerializeField] private GameObject inGameUI;
+    //[SerializeField] private GameObject deathUI;
 
     //Object that Tunnel's read rotation off & tunnel movement.
     private GameObject controller;
@@ -153,9 +153,9 @@ public class Player : MonoBehaviour {
             //Tells how long play session was
             Debug.Log("Player lasted " + Time.timeSinceLevelLoad + " seconds.");
 
-            //Turns restart UI on
-            inGameUI.SetActive(false);
-            deathUI.SetActive(true);
+            ////Turns restart UI on
+            //inGameUI.SetActive(false);
+            //deathUI.SetActive(true);
 
             //Deactivates Tunnel movement
             Cursor.visible = true;

@@ -33,15 +33,7 @@ public class MarbleSpiral : MonoBehaviour {
         //Move To Center
         else if (transform.GetComponent<Rigidbody>().useGravity == false)
         {
-            //Look at Center
-            Vector3 direction = centerLocation.transform.position - transform.position;
-            Quaternion toRotation = Quaternion.FromToRotation(transform.forward, direction);
-            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, faceSpeed);
-
-            //Direct Movement to Center
-            Rigidbody rb = GetComponent<Rigidbody>();
-            Vector3 currentVelocity = rb.velocity;
-            rb.AddForce(direction*moveSpeed, ForceMode.Impulse);
+            MoveToCenter();
         }
         //Fall down tunnel
         else
@@ -49,6 +41,19 @@ public class MarbleSpiral : MonoBehaviour {
             return;
         }
 	}
+
+    private void MoveToCenter()
+    {
+        //Look at Center
+        Vector3 direction = centerLocation.transform.position - transform.position;
+        Quaternion toRotation = Quaternion.FromToRotation(transform.forward, direction);
+        transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, faceSpeed);
+
+        //Direct Movement to Center
+        Rigidbody rb = GetComponent<Rigidbody>();
+        Vector3 currentVelocity = rb.velocity;
+        rb.AddForce(direction * moveSpeed, ForceMode.Impulse);
+    }
 
     private void SpiralPosition()
     {

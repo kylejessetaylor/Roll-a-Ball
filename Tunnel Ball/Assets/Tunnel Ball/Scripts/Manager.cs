@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Manager : MenuButtons {
 
@@ -13,13 +14,16 @@ public class Manager : MenuButtons {
         //PlayerPrefs.SetFloat("Highscore", 0);
         //TEST DELETE ME
 
+        //Sets old high score for number tick
+        oldHighScore = PlayerPrefs.GetFloat("Highscore");
+        numberTick = oldHighScore;
+
         //Builds First Tunnel
         BuildLevel (firstTunnel);
 
         //Loads in the current highscore into the game on launch
         currentHighScore = PlayerPrefs.GetFloat("Highscore");
-        highScore.text = "Highscore:  " + PlayerPrefs.GetFloat("Highscore");
-        stopScore = false;
+        highScore.text = "Highscore: " + PlayerPrefs.GetFloat("Highscore");
 
         //Fog
         //InvokeRepeating("FogUpdate", 1f, 1f);
@@ -27,14 +31,9 @@ public class Manager : MenuButtons {
 
     void Update (){
         //Updates Score
-        if (stopScore == false)
-        {
-            CurrentScore();
-
-            //FPS
-            FrameRate();
-        }
-
+        CurrentScore();            
+        
+        //For PC use
         PlayerDeathHotkeys();
     }
 
@@ -68,22 +67,6 @@ public class Manager : MenuButtons {
 
     #endregion
 
-    #region FrameRate
-
-    [Header("FrameRate")]
-    public Text frameRate;
-    private float currentFPS;
-    private float averageFPS;
-    private float lowestFPS;
-
-    private void FrameRate()
-    {
-        
-    }
-
-
-    #endregion
-
     #region FirstTunnel
 
     //Places Tunnel_001 on game start
@@ -95,84 +78,158 @@ public class Manager : MenuButtons {
     #endregion
 
     #region Score
+    public float scoremultiplier = 0.475f;
 
     [Header("Score")]
     //In Game UI
-    public Text score;
-    public Text highScore;
+    public GameObject scoreTable;
+    public TextMeshProUGUI score;
+    public TextMeshProUGUI highScore;
+    private float oldHighScore;
+    private float numberTick;
+    private float lilNumber;
 
+    [Header("Dead TEST")]
+    public TextMeshProUGUI header;
+    public GameObject tryAgain;
+
+    public float scoreLerp = 3f;
+    public float fadeInDelay = 5f;
+    public float startTicking = 1.5f;
+    public float numberTickRate = 0.1f;
+    public float fontIncreaseRate = 0.1f;
+
+    public GameObject leftButton;
+    public GameObject rightButton;
+
+    [Header("Dead")]
     ///Dead UI
+    public GameObject deadTable;
     //For YourScore only
-    public Text finalScore;
-    public Text deadHighScore;
+    public TextMeshProUGUI finalScore;
+    public TextMeshProUGUI deadHighScore;
     //For NewHighScore only
-    public Text newHighScore;
+    public TextMeshProUGUI newHighScore;
+    public TextMeshProUGUI whoops;
 
-    public Text whoops;
-
-
-    public float scoremultiplier = 0.2f;
     protected float endScore;
     protected float scorez;
     protected float currentHighScore;
 
-    private bool stopScore = false;
-
     public void CurrentScore()
     {
-        //Stops score going up after death
+        //If the player still exsists
         if (GameObject.FindGameObjectWithTag("Player") != null)
         {
             //Score calculator
             scorez = scoremultiplier * Mathf.Pow(Time.timeSinceLevelLoad, 1.5f);
             //Score Text
-            score.text = "Score:  " + Mathf.Round(scorez);
+            score.text = "Score: " + Mathf.Round(scorez);
         }
         //Shows player's current score that round
-        if (scorez <= currentHighScore && (GameObject.FindGameObjectWithTag("Player") == null))
+        else if (scorez <= currentHighScore)
         {
             YourScore();
         }
         //Saves new highscore and applies text when player dies
-        if (scorez > currentHighScore && (GameObject.FindGameObjectWithTag("Player") == null))
+        else if (scorez > currentHighScore)
         {
             SaveScore();
-            NewHighScore();
+            YourScore();
         }
     }
 
     //Shows Score on Endgame screen
     public void YourScore()
     {
-        //Enalbes & Disables appropriate text objects
-        newHighScore.transform.gameObject.SetActive(false);
+        /// SMOOTH movement of current score to center
+        /// --------------------------------------------------------
+        //Turns Buttons off
+        leftButton.SetActive(false);
+        rightButton.SetActive(false);
 
-        finalScore.transform.gameObject.SetActive(true);
-        deadHighScore.transform.gameObject.SetActive(true);
+        //Lerp Movement transition
+        scoreTable.transform.position = Vector3.Lerp(scoreTable.transform.position, deadTable.transform.position, scoreLerp * Time.deltaTime);
+        //Sprite change
+        scoreTable.GetComponent<Image>().sprite = deadTable.GetComponent<Image>().sprite;
+        //Lerp Size transition
+        RectTransform scoreRect = scoreTable.GetComponent<RectTransform>();
+        RectTransform deadRect = deadTable.GetComponent<RectTransform>();
+        scoreRect.sizeDelta = new Vector2(deadRect.sizeDelta.x, deadRect.sizeDelta.y);
 
-        whoops.text = "";
-        //Applies score to text
-        finalScore.text = "Your Score: " + Mathf.Round(scorez);
-        deadHighScore.text = "Highscore: " + ((int)PlayerPrefs.GetFloat("Highscore")).ToString();
+        #region Highscore Setup
 
-        //textChange [Random.Range (0, textList.Count)]
+        ///Highscore Setup
+        if (scorez >= currentHighScore)
+        {
+            //Header
+            header.gameObject.SetActive(true);
+            Color h = header.GetComponent<TextMeshProUGUI>().color;
+            h.a += (scoreLerp * 1.5f) / fadeInDelay * Time.deltaTime;
+            header.GetComponent<TextMeshProUGUI>().color = h;
 
-        //Stops numbers from continuing to calculate after death
-        stopScore = true;
-    }
+            //Score
+            Color s = score.GetComponent<TextMeshProUGUI>().color;
+            s.a -= scoreLerp / 4f * fadeInDelay * Time.deltaTime;
+            score.GetComponent<TextMeshProUGUI>().color = s;
 
-    //Updates and Shows Highscore on Endgame screen
-    public void NewHighScore()
-    {
-        //Enalbes & Disables appropriate text objects
-        finalScore.transform.gameObject.SetActive(false);
-        deadHighScore.transform.gameObject.SetActive(false);
+            //Checks for Screen animations to finish
+            if (deadHighScore.GetComponent<TextMeshProUGUI>().fontSize -
+            highScore.GetComponent<TextMeshProUGUI>().fontSize <= startTicking)
+            {
+                //Highscore Digit increase
+                if (Mathf.Round(numberTick) < Mathf.Round(scorez))
+                {
+                    numberTick += numberTickRate * (scorez - oldHighScore) * Time.deltaTime;
+                    highScore.text = "Highscore: " + Mathf.Round(numberTick);
+                    
+                    //Increases Font Size progressively
+                    if (numberTick - lilNumber >= 1f)
+                    {
+                        lilNumber = numberTick;
+                        highScore.fontSize += fontIncreaseRate;
+                    }
+                }
+                //Stops going above actual highscore
+                else
+                {
+                    highScore.text = "Highscore: " + PlayerPrefs.GetFloat("Highscore");
+                }
+            }
+            
+        }
+        #endregion
 
-        newHighScore.transform.gameObject.SetActive(true);
+        #region No-Highscore Setup
+        ///No-Highscore Setup
+        else
+        {
+            //Score
+            score.transform.localPosition = Vector3.Lerp(score.transform.localPosition, finalScore.transform.localPosition, scoreLerp * Time.deltaTime);
+            score.GetComponent<TextMeshProUGUI>().fontSize = Mathf.Lerp(score.GetComponent<TextMeshProUGUI>().fontSize,
+                finalScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
+        }
+        #endregion
 
-        whoops.text = "Highscore!";
-        ////Applies score to text
-        newHighScore.text = "Your Highscore: " + Mathf.Round(scorez);
+        #region Bothscore Setup
+        //Highscore
+        highScore.transform.localPosition = Vector3.Lerp(highScore.transform.localPosition, deadHighScore.transform.localPosition, scoreLerp * Time.deltaTime);
+        highScore.GetComponent<TextMeshProUGUI>().fontSize = Mathf.Lerp(highScore.GetComponent<TextMeshProUGUI>().fontSize,
+            deadHighScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
+        
+
+        float buttonMultiplier = 1.5f;
+        //Try Button Button
+        tryAgain.gameObject.SetActive(true);
+        Color tA = tryAgain.GetComponent<Image>().color;
+        tA.a += (scoreLerp * buttonMultiplier) / fadeInDelay * Time.deltaTime;
+        tryAgain.GetComponent<Image>().color = tA;
+        //Try Button Text
+        Color tAT = tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
+        tAT.a += (scoreLerp * buttonMultiplier * 2f) / (fadeInDelay) * Time.deltaTime;
+        tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = tAT;
+
+        #endregion
     }
 
     //Saves new Highscore
@@ -180,10 +237,6 @@ public class Manager : MenuButtons {
     {
         PlayerPrefs.SetFloat("Highscore", Mathf.Round(scorez));
     }
-
-    //	private Text FunnyText (Text textChange) {
-    //
-    //	}
 
     #endregion
 }
