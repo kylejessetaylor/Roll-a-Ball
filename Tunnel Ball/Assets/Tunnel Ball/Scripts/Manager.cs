@@ -17,6 +17,8 @@ public class Manager : MenuButtons {
         //Sets old high score for number tick
         oldHighScore = PlayerPrefs.GetFloat("Highscore");
         numberTick = oldHighScore;
+        //ButtonMask
+        startHeight = 1f;
 
         //Builds First Tunnel
         BuildLevel (firstTunnel);
@@ -89,7 +91,8 @@ public class Manager : MenuButtons {
     private float numberTick;
     private float lilNumber;
 
-    [Header("Dead TEST")]
+    [Header("Dead")]
+    private float startHeight;
     public TextMeshProUGUI header;
     public GameObject tryAgain;
 
@@ -102,7 +105,7 @@ public class Manager : MenuButtons {
     public GameObject leftButton;
     public GameObject rightButton;
 
-    [Header("Dead")]
+    [Header("Dead Old")]
     ///Dead UI
     public GameObject deadTable;
     //For YourScore only
@@ -139,6 +142,8 @@ public class Manager : MenuButtons {
         }
     }
 
+    private float freeMulti = 80f;
+
     //Shows Score on Endgame screen
     public void YourScore()
     {
@@ -148,6 +153,8 @@ public class Manager : MenuButtons {
         leftButton.SetActive(false);
         rightButton.SetActive(false);
 
+        #region Bothscore Setup
+
         //Lerp Movement transition
         scoreTable.transform.position = Vector3.Lerp(scoreTable.transform.position, deadTable.transform.position, scoreLerp * Time.deltaTime);
         //Sprite change
@@ -155,7 +162,34 @@ public class Manager : MenuButtons {
         //Lerp Size transition
         RectTransform scoreRect = scoreTable.GetComponent<RectTransform>();
         RectTransform deadRect = deadTable.GetComponent<RectTransform>();
-        scoreRect.sizeDelta = new Vector2(deadRect.sizeDelta.x, deadRect.sizeDelta.y);
+        //Smooth RectTransform change from Score Size to Dead Size
+        float changeX = Mathf.Lerp(scoreRect.sizeDelta.x, deadRect.sizeDelta.x, scoreLerp * Time.deltaTime);
+        float changeY = Mathf.Lerp(scoreRect.sizeDelta.y, deadRect.sizeDelta.y, scoreLerp * Time.deltaTime);
+        scoreRect.sizeDelta = new Vector2(changeX, changeY);
+
+        //Highscore
+        highScore.transform.localPosition = Vector3.Lerp(highScore.transform.localPosition, deadHighScore.transform.localPosition, scoreLerp * Time.deltaTime);
+        highScore.GetComponent<TextMeshProUGUI>().fontSize = Mathf.Lerp(highScore.GetComponent<TextMeshProUGUI>().fontSize,
+            deadHighScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
+
+        //ButtonMask
+        RectTransform buttonMask = tryAgain.transform.parent.GetComponent<RectTransform>();
+        freeMulti -= 22.5f * Time.deltaTime;
+        startHeight += scoreLerp * freeMulti * Time.deltaTime;
+        buttonMask.sizeDelta = new Vector2(buttonMask.sizeDelta.x, startHeight);
+
+        float buttonMultiplier = 1.5f;
+        //Try Button Button
+        tryAgain.gameObject.SetActive(true);
+        Color tA = tryAgain.GetComponent<Image>().color;
+        tA.a += (scoreLerp * buttonMultiplier) / fadeInDelay * Time.deltaTime;
+        tryAgain.GetComponent<Image>().color = tA;
+        //Try Button Text
+        Color tAT = tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
+        tAT.a += (scoreLerp * buttonMultiplier * 2f) / (fadeInDelay) * Time.deltaTime;
+        tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = tAT;
+
+        #endregion
 
         #region Highscore Setup
 
@@ -210,26 +244,7 @@ public class Manager : MenuButtons {
                 finalScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
         }
         #endregion
-
-        #region Bothscore Setup
-        //Highscore
-        highScore.transform.localPosition = Vector3.Lerp(highScore.transform.localPosition, deadHighScore.transform.localPosition, scoreLerp * Time.deltaTime);
-        highScore.GetComponent<TextMeshProUGUI>().fontSize = Mathf.Lerp(highScore.GetComponent<TextMeshProUGUI>().fontSize,
-            deadHighScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
-        
-
-        float buttonMultiplier = 1.5f;
-        //Try Button Button
-        tryAgain.gameObject.SetActive(true);
-        Color tA = tryAgain.GetComponent<Image>().color;
-        tA.a += (scoreLerp * buttonMultiplier) / fadeInDelay * Time.deltaTime;
-        tryAgain.GetComponent<Image>().color = tA;
-        //Try Button Text
-        Color tAT = tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
-        tAT.a += (scoreLerp * buttonMultiplier * 2f) / (fadeInDelay) * Time.deltaTime;
-        tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = tAT;
-
-        #endregion
+       
     }
 
     //Saves new Highscore
