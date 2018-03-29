@@ -174,9 +174,16 @@ public class Manager : MenuButtons {
 
         //ButtonMask
         RectTransform buttonMask = tryAgain.transform.parent.GetComponent<RectTransform>();
-        freeMulti -= 22.5f * Time.deltaTime;
-        startHeight += scoreLerp * freeMulti * Time.deltaTime;
-        buttonMask.sizeDelta = new Vector2(buttonMask.sizeDelta.x, startHeight);
+        buttonMask.sizeDelta = new Vector2(buttonMask.sizeDelta.x, 300f);
+        //freeMulti -= 22.5f * Time.deltaTime;
+        //startHeight += scoreLerp * freeMulti * Time.deltaTime;
+        ////Stops Mask's height inverting
+        //if (buttonMask.sizeDelta.y <= 300f)
+        //{
+        //    buttonMask.sizeDelta = new Vector2(buttonMask.sizeDelta.x, startHeight);
+        //}
+
+
 
         float buttonMultiplier = 1.5f;
         //Try Button Button
