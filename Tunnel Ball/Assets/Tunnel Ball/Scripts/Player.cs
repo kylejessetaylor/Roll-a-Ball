@@ -26,10 +26,6 @@ public class Player : MonoBehaviour {
         DifferentTunnel(other);
     }
 
-    /// <summary>
-    /// Functions
-    /// </summary> 
-
     #region Player Rotation
 
     [Header("Player Rotation")]

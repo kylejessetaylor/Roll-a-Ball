@@ -46,11 +46,6 @@ public class Controls : MonoBehaviour {
     {
         //Sets new targetRotation
         targetRotation *= Quaternion.AngleAxis(45, Vector3.back);
-
-        ////SideRotation
-        //float pongRate = 10f;
-        //Quaternion sideRotation = Quaternion.AngleAxis(10f, Vector3.up * Mathf.PingPong(10f, pongRate * Time.deltaTime));
-        //player.transform.rotation = Quaternion.Slerp (transform.rotation, sideRotation, Time.deltaTime * rotationSpeed);
     }
 
     public void TurnLeft()

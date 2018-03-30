@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Tunnel : MonoBehaviour
 {
-
 	//Speed Data
 	public float speedMultiplier = 1f;
 	public float maxVelocity = 120f;
@@ -32,7 +31,6 @@ public class Tunnel : MonoBehaviour
 		rotator = GameObject.FindGameObjectWithTag ("Controls");
 	}
 
-
 	void Update () {
 		TunnelRotation ();
 		TunnelAcceleration ();
@@ -42,7 +40,6 @@ public class Tunnel : MonoBehaviour
 	private void ResetTunnel () {
 		currentVelocity = startVelocity;
 	}
-
 
 	private void TunnelRotation () {
 		//Aligns all tunnel's to same rotation

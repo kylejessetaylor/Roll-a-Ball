@@ -104,6 +104,7 @@ public class Manager : MenuButtons {
     #endregion
 
     #region Score
+
     public float scoremultiplier = 0.475f;
 
     [Header("Score")]
@@ -142,9 +143,10 @@ public class Manager : MenuButtons {
     protected float scorez;
     protected float currentHighScore;
 
+    //Calculates score during runtime & finalizes/saves it after death
     public void CurrentScore()
     {
-        //If the player still exsists
+        //If the player still exists
         if (GameObject.FindGameObjectWithTag("Player") != null)
         {
             //Score calculator
@@ -264,8 +266,7 @@ public class Manager : MenuButtons {
         }
         #endregion
 
-        LerpPauseButton(originalColor, fadedColor);
-       
+        LerpPauseButton(originalColor, transparent);     
     }
 
     //Saves new Highscore
@@ -290,6 +291,7 @@ public class Manager : MenuButtons {
 
     private Color originalColor;
     public Color fadedColor;
+    private Color transparent;
 
     private float countDown;
 
@@ -331,6 +333,7 @@ public class Manager : MenuButtons {
 
         //Color
         originalColor = pauseButtonText.GetComponent<TextMeshProUGUI>().color;
+        transparent = new Color(1, 1, 1, 0);
     }
 
     //Pause Button
@@ -383,11 +386,11 @@ public class Manager : MenuButtons {
             resumeButton.GetComponent<Button>().interactable = true;
 
             Color rb = resumeButton.GetComponent<Image>().color;
-            rb.a += (scoreLerp) / fadeInDelay * Time.unscaledDeltaTime;
+            rb.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
             resumeButton.GetComponent<Image>().color = rb;
             //Fade-In Resume Text
             Color rt = resumeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
-            rt.a += (scoreLerp) / fadeInDelay * Time.unscaledDeltaTime;
+            rt.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
             resumeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = rt;
 
             //Enable Menu Button
@@ -395,11 +398,11 @@ public class Manager : MenuButtons {
             menuButton.GetComponent<Button>().interactable = true;
 
             Color mb = menuButton.GetComponent<Image>().color;
-            mb.a += (scoreLerp) / fadeInDelay * Time.unscaledDeltaTime;
+            mb.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
             menuButton.GetComponent<Image>().color = mb;
             //Fade-In Menu Text
             Color mt = menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
-            mt.a += (scoreLerp) / fadeInDelay * Time.unscaledDeltaTime;
+            mt.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
             menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = mt;
 
         }
@@ -417,19 +420,19 @@ public class Manager : MenuButtons {
                 ///Disable Resume Button ---------------------------------------------------------------
                 resumeButton.GetComponent<Button>().interactable = false;
 
-                rb.a -= (scoreLerp) / fadeInDelay * Time.unscaledDeltaTime * 2f;
+                rb.a -= (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime * 2f;
                 resumeButton.GetComponent<Image>().color = rb;
                 //Fade-Out Resume Text
-                rt.a -= (scoreLerp) / fadeInDelay * Time.unscaledDeltaTime * 2f;
+                rt.a -= (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime * 2f;
                 resumeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = rt;
 
                 ///Disable Menu Button -----------------------------------------------------------------
                 menuButton.GetComponent<Button>().interactable = false;
 
-                mb.a -= (scoreLerp) / fadeInDelay * Time.unscaledDeltaTime * 2f;
+                mb.a -= (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime * 2f;
                 menuButton.GetComponent<Image>().color = mb;
                 //Fade-Out Menu Text
-                mt.a -= (scoreLerp) / fadeInDelay * Time.unscaledDeltaTime * 2f;
+                mt.a -= (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime * 2f;
                 menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = mt;
             }
 
@@ -500,7 +503,7 @@ public class Manager : MenuButtons {
             //Text to display b4 countdown
             else
             {
-                pauseText.text = "Starting in...";
+                pauseText.text = "Starting in";
             }
         }
     }
