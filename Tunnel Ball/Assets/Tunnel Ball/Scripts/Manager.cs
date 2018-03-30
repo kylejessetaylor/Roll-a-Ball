@@ -19,6 +19,7 @@ public class Manager : MenuButtons {
         //Hides Pause Menu
         HidePauseOnStart();
     }
+
     void Start () {
         //TEST DELETE ME
         //PlayerPrefs.SetFloat("Highscore", 0);
@@ -27,8 +28,6 @@ public class Manager : MenuButtons {
         //Sets old high score for number tick
         oldHighScore = PlayerPrefs.GetFloat("Highscore");
         numberTick = oldHighScore;
-        //ButtonMask
-        startHeight = 1f;
 
         //Builds First Tunnel
         BuildLevel (firstTunnel);
@@ -117,7 +116,6 @@ public class Manager : MenuButtons {
     private float lilNumber;
 
     [Header("Dead")]
-    private float startHeight;
     public TextMeshProUGUI header;
     public GameObject tryAgain;
 
@@ -166,8 +164,6 @@ public class Manager : MenuButtons {
             YourScore();
         }
     }
-
-    private float freeMulti = 80f;
 
     //Shows Score on Endgame screen
     public void YourScore()
@@ -267,6 +263,8 @@ public class Manager : MenuButtons {
                 finalScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
         }
         #endregion
+
+        LerpPauseButton(originalColor, fadedColor);
        
     }
 
@@ -289,6 +287,9 @@ public class Manager : MenuButtons {
     public GameObject resumeButton;
     public GameObject menuButton;
     public float countDownStartTime = 3.5f;
+
+    private Color originalColor;
+    public Color fadedColor;
 
     private float countDown;
 
@@ -327,6 +328,9 @@ public class Manager : MenuButtons {
         //Disables Buttons
         resumeButton.SetActive(false);
         menuButton.SetActive(false);
+
+        //Color
+        originalColor = pauseButtonText.GetComponent<TextMeshProUGUI>().color;
     }
 
     //Pause Button
@@ -364,6 +368,9 @@ public class Manager : MenuButtons {
             //Pauses Game
             Time.timeScale = 0;
             countDown = countDownStartTime;
+
+            //Dims Pause button's color
+            LerpPauseButton(originalColor, fadedColor);
 
             //Title enable
             pauseTitle.GetComponent<Animator>().enabled = true;
@@ -480,6 +487,9 @@ public class Manager : MenuButtons {
                 pauseTitle.SetActive(false);
                 pauseText.text = "Paused";
 
+                //Pause Button Color
+                LerpPauseButton(pauseButtonText.GetComponent<TextMeshProUGUI>().color, originalColor);
+
                 //Enable Control Buttons
                 leftButton.SetActive(true);
                 rightButton.SetActive(true);
@@ -493,6 +503,14 @@ public class Manager : MenuButtons {
                 pauseText.text = "Starting in...";
             }
         }
+    }
+
+    public void LerpPauseButton(Color from, Color to)
+    {
+        TextMeshProUGUI pbText = pauseButtonText.GetComponent<TextMeshProUGUI>();
+        Color color = pbText.color;
+        //Color Lerp
+        pbText.color = Color.Lerp(from, to, scoreLerp);
     }
 
     #endregion

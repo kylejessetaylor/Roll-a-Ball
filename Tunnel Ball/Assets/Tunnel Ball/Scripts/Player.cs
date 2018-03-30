@@ -135,7 +135,6 @@ public class Player : MonoBehaviour {
     public float forceMultiplier = 20f;
     public float heightThrust;
     private float thrust;
-    private bool force = true;
 
     ////On & Off UI
     //[SerializeField] private GameObject inGameUI;
@@ -176,7 +175,6 @@ public class Player : MonoBehaviour {
             GameObject marbleShards = Instantiate(deadPlayer);
             marbleShards.transform.position = transform.position;
             //Single force to all shards
-            force = false;
             for (int i = 0; i <= marbleShards.transform.childCount; i++)
             {
                 //Applies force to each child of Marble Shard Parent
