@@ -65,7 +65,12 @@ public class Player : MonoBehaviour {
         //Current Velocity with multiplier (increasing multiplier increases rate of speed);
         tractionSpeed = (speedMultiplier * 0.1f * ySquared)/rotateSpeed + startSpeed;
 
-        transform.Rotate(new Vector3(tractionSpeed, 0, 0));
+        //Freezes rotation when game is paused
+        if (Time.timeScale == 1)
+        {
+            //Applies rotation to Marble
+            transform.Rotate(new Vector3(tractionSpeed, 0, 0));
+        }
     }
     #endregion
 

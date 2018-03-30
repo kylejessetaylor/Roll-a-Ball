@@ -25,6 +25,8 @@ public class MenuButtons : MonoBehaviour {
         {
             FadeButtons();
         }
+
+        Time.timeScale = 1;
     }
 
     #region Buttons
