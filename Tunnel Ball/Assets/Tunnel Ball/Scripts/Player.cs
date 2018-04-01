@@ -32,7 +32,6 @@ public class Player : MonoBehaviour {
     public float rotateSpeed = 40f;
     public float startSpeed;
     float tractionSpeed;
-	float timer;
 	public float rotationCap = 40;
 	//private Quaternion targetRotation;
 
@@ -42,30 +41,27 @@ public class Player : MonoBehaviour {
 
     private void RotatingMarble()
     {
-        timer = Time.timeSinceLevelLoad;
 
         //Caps the max rotationSpeed
-        if (timer >= rotationCap)
+        if (tractionSpeed > rotationCap)
         {
-            timer = rotationCap;
+            tractionSpeed = rotationCap;
         }
-
-
-        //tractionSpeed = rotateSpeed * timer * Time.deltaTime;
-
-        ///Marble rotation that increases on change in time.
-        //Radius of the circle
-        float radiusSquared = Mathf.Pow(maxVelocity, 2f);
-        //Calculates y^2
-        float ySquared = radiusSquared - Mathf.Pow(Time.timeSinceLevelLoad - maxVelocity, 2f);
-        //Current Velocity with multiplier (increasing multiplier increases rate of speed);
-        tractionSpeed = (speedMultiplier * 0.1f * ySquared)/rotateSpeed + startSpeed;
+        else
+        {
+            //Radius of the circle
+            float radiusSquared = Mathf.Pow(maxVelocity, 2f);
+            //Calculates y^2
+            float ySquared = radiusSquared - Mathf.Pow(Time.timeSinceLevelLoad - maxVelocity, 2f);
+            //Current Velocity with multiplier (increasing multiplier increases rate of speed);
+            tractionSpeed = (speedMultiplier * 0.1f * ySquared) / (1/rotateSpeed) + startSpeed;
+        }
 
         //Freezes rotation when game is paused
         if (Time.timeScale == 1)
         {
             //Applies rotation to Marble
-            transform.Rotate(new Vector3(tractionSpeed, 0, 0));
+            transform.Rotate(new Vector3(tractionSpeed * 10f * Time.deltaTime, 0, 0));
         }
     }
     #endregion

@@ -385,25 +385,30 @@ public class Manager : MenuButtons {
             resumeButton.SetActive(true);
             resumeButton.GetComponent<Button>().interactable = true;
 
+            //ID button colors
             Color rb = resumeButton.GetComponent<Image>().color;
-            rb.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
-            resumeButton.GetComponent<Image>().color = rb;
-            //Fade-In Resume Text
             Color rt = resumeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
-            rt.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
-            resumeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = rt;
-
-            //Enable Menu Button
-            menuButton.SetActive(true);
-            menuButton.GetComponent<Button>().interactable = true;
-
             Color mb = menuButton.GetComponent<Image>().color;
-            mb.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
-            menuButton.GetComponent<Image>().color = mb;
-            //Fade-In Menu Text
             Color mt = menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
-            mt.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
-            menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = mt;
+
+            if (rb.a < 1 && mb.a < 1)
+            {
+                rb.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
+                resumeButton.GetComponent<Image>().color = rb;
+                //Fade-In Resume Text
+                rt.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
+                resumeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = rt;
+
+                //Enable Menu Button
+                menuButton.SetActive(true);
+                menuButton.GetComponent<Button>().interactable = true;
+
+                mb.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
+                menuButton.GetComponent<Image>().color = mb;
+                //Fade-In Menu Text
+                mt.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
+                menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = mt;
+            }
 
         }
 
