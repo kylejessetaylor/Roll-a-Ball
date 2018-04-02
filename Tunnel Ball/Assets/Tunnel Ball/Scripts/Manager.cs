@@ -11,8 +11,8 @@ public class Manager : MenuButtons {
     [HideInInspector]
     public GameObject playerC;
 
-    private void Awake()
-    {
+    void Awake()
+    {       
         //Sets player
         playerC = GameObject.FindGameObjectWithTag("Player");
 
@@ -24,6 +24,13 @@ public class Manager : MenuButtons {
         //TEST DELETE ME
         //PlayerPrefs.SetFloat("Highscore", 0);
         //TEST DELETE ME
+
+        //Sets Android's max FPS
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            Application.targetFrameRate = 45;
+            Debug.Log("Mobile");
+        }
 
         //Sets old high score for number tick
         oldHighScore = PlayerPrefs.GetFloat("Highscore");
@@ -63,7 +70,7 @@ public class Manager : MenuButtons {
         }
     }
 
-    #region Fog
+#region Fog
 
     ////Fog
     //[Header("Fog")]
@@ -91,9 +98,9 @@ public class Manager : MenuButtons {
     //    } while (RenderSettings.fogDensity > minFog);
     //}
 
-    #endregion
+#endregion
 
-    #region FirstTunnel
+#region FirstTunnel
 
     //Places Tunnel_001 on game start
     private void BuildLevel(GameObject tunnelPieceToPlace)
@@ -101,9 +108,9 @@ public class Manager : MenuButtons {
         //GameObject newTunnel =
         TrashMan.spawn(tunnelPieceToPlace, (Vector3.forward * -0.24f), Quaternion.identity);
     }
-    #endregion
+#endregion
 
-    #region Score
+#region Score
 
     public float scoremultiplier = 0.475f;
 
@@ -176,7 +183,7 @@ public class Manager : MenuButtons {
         leftButton.SetActive(false);
         rightButton.SetActive(false);
 
-        #region Bothscore Setup
+#region Bothscore Setup
 
         //Lerp Movement transition
         scoreTable.transform.position = Vector2.Lerp(scoreTable.transform.position, deadTable.transform.position, scoreLerp * Time.deltaTime);
@@ -210,9 +217,9 @@ public class Manager : MenuButtons {
         tAT.a += (scoreLerp * buttonMultiplier * 2f) / (fadeInDelay) * Time.deltaTime;
         tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = tAT;
 
-        #endregion
+#endregion
 
-        #region Highscore Setup
+#region Highscore Setup
 
         ///Highscore Setup
         if (scorez >= currentHighScore)
@@ -253,9 +260,9 @@ public class Manager : MenuButtons {
             }
             
         }
-        #endregion
+#endregion
 
-        #region No-Highscore Setup
+#region No-Highscore Setup
         ///No-Highscore Setup
         else
         {
@@ -264,7 +271,7 @@ public class Manager : MenuButtons {
             score.GetComponent<TextMeshProUGUI>().fontSize = Mathf.Lerp(score.GetComponent<TextMeshProUGUI>().fontSize,
                 finalScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
         }
-        #endregion
+#endregion
 
         LerpPauseButton(originalColor, transparent);     
     }
@@ -275,9 +282,9 @@ public class Manager : MenuButtons {
         PlayerPrefs.SetFloat("Highscore", Mathf.Round(scorez));
     }
 
-    #endregion
+#endregion
 
-    #region Pause
+#region Pause
 
     [Header("Pause Menu")]
     private bool isPaused = false;
@@ -521,5 +528,5 @@ public class Manager : MenuButtons {
         pbText.color = Color.Lerp(from, to, scoreLerp);
     }
 
-    #endregion
+#endregion
 }
