@@ -11,6 +11,8 @@ public class Manager : MenuButtons {
     [HideInInspector]
     public GameObject playerC;
 
+    public float mobileMultiplier = 1.25f;
+
     void Awake()
     {       
         //Sets player
@@ -18,6 +20,13 @@ public class Manager : MenuButtons {
 
         //Hides Pause Menu
         HidePauseOnStart();
+
+        ////Changes score multiplier to match with new tunnel speed multiplier
+        //if (SystemInfo.deviceType == DeviceType.Handheld)
+        //{
+        //    scoremultiplier = scoremultiplier * mobileMultiplier;
+        //}
+
     }
 
     void Start () {
@@ -51,7 +60,7 @@ public class Manager : MenuButtons {
         //For PC use
         PlayerDeathHotkeys();
         //Pause Hotkeys
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Space))
         {
             if (Time.timeScale == 1)
             {
@@ -70,7 +79,7 @@ public class Manager : MenuButtons {
         }
     }
 
-#region Fog
+    #region Fog
 
     ////Fog
     //[Header("Fog")]
@@ -81,7 +90,7 @@ public class Manager : MenuButtons {
     //void FogUpdate()
     //{
     //    ////Fog Density based on Velocity
-    //    //RenderSettings.fogDensity = Mathf.Lerp(maxFog, minFog, fogRate * Time.deltaTime);
+    //    //RenderSettings.fogDensity = Mathf.Lerp(maxFog, minFog, fogRate * Time.unscaledDeltaTime);
     //}
 
     //void FogFading()
@@ -93,14 +102,14 @@ public class Manager : MenuButtons {
     //{
     //    do
     //    {
-    //        RenderSettings.fogDensity -= fogRate * Time.deltaTime;
+    //        RenderSettings.fogDensity -= fogRate * Time.unscaledDeltaTime;
     //        return yield null;
     //    } while (RenderSettings.fogDensity > minFog);
     //}
 
-#endregion
+    #endregion
 
-#region FirstTunnel
+    #region FirstTunnel
 
     //Places Tunnel_001 on game start
     private void BuildLevel(GameObject tunnelPieceToPlace)
@@ -110,7 +119,7 @@ public class Manager : MenuButtons {
     }
 #endregion
 
-#region Score
+    #region Score
 
     public float scoremultiplier = 0.475f;
 
@@ -186,21 +195,21 @@ public class Manager : MenuButtons {
 #region Bothscore Setup
 
         //Lerp Movement transition
-        scoreTable.transform.position = Vector2.Lerp(scoreTable.transform.position, deadTable.transform.position, scoreLerp * Time.deltaTime);
+        scoreTable.transform.position = Vector2.Lerp(scoreTable.transform.position, deadTable.transform.position, scoreLerp * Time.unscaledDeltaTime);
         //Sprite change
         scoreTable.GetComponent<Image>().sprite = deadTable.GetComponent<Image>().sprite;
         //Lerp Size transition
         RectTransform scoreRect = scoreTable.GetComponent<RectTransform>();
         RectTransform deadRect = deadTable.GetComponent<RectTransform>();
         //Smooth RectTransform change from Score Size to Dead Size
-        float changeX = Mathf.Lerp(scoreRect.sizeDelta.x, deadRect.sizeDelta.x, scoreLerp * Time.deltaTime);
-        float changeY = Mathf.Lerp(scoreRect.sizeDelta.y, deadRect.sizeDelta.y, scoreLerp * Time.deltaTime);
+        float changeX = Mathf.Lerp(scoreRect.sizeDelta.x, deadRect.sizeDelta.x, scoreLerp * Time.unscaledDeltaTime);
+        float changeY = Mathf.Lerp(scoreRect.sizeDelta.y, deadRect.sizeDelta.y, scoreLerp * Time.unscaledDeltaTime);
         scoreRect.sizeDelta = new Vector2(changeX, changeY);
 
         //Highscore
-        highScore.transform.localPosition = Vector2.Lerp(highScore.transform.localPosition, deadHighScore.transform.localPosition, scoreLerp * Time.deltaTime);
+        highScore.transform.localPosition = Vector2.Lerp(highScore.transform.localPosition, deadHighScore.transform.localPosition, scoreLerp * Time.unscaledDeltaTime);
         highScore.GetComponent<TextMeshProUGUI>().fontSize = Mathf.Lerp(highScore.GetComponent<TextMeshProUGUI>().fontSize,
-            deadHighScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
+            deadHighScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.unscaledDeltaTime);
 
         //ButtonMask
         RectTransform buttonMask = tryAgain.transform.parent.GetComponent<RectTransform>();
@@ -210,11 +219,11 @@ public class Manager : MenuButtons {
         //Try Button Button
         tryAgain.gameObject.SetActive(true);
         Color tA = tryAgain.GetComponent<Image>().color;
-        tA.a += (scoreLerp * buttonMultiplier) / fadeInDelay * Time.deltaTime;
+        tA.a += (scoreLerp * buttonMultiplier) / fadeInDelay * Time.unscaledDeltaTime;
         tryAgain.GetComponent<Image>().color = tA;
         //Try Button Text
         Color tAT = tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
-        tAT.a += (scoreLerp * buttonMultiplier * 2f) / (fadeInDelay) * Time.deltaTime;
+        tAT.a += (scoreLerp * buttonMultiplier * 2f) / (fadeInDelay) * Time.unscaledDeltaTime;
         tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = tAT;
 
 #endregion
@@ -227,12 +236,12 @@ public class Manager : MenuButtons {
             //Header
             header.gameObject.SetActive(true);
             Color h = header.GetComponent<TextMeshProUGUI>().color;
-            h.a += (scoreLerp * 1.5f) / fadeInDelay * Time.deltaTime;
+            h.a += (scoreLerp * 1.5f) / fadeInDelay * Time.unscaledDeltaTime;
             header.GetComponent<TextMeshProUGUI>().color = h;
 
             //Score
             Color s = score.GetComponent<TextMeshProUGUI>().color;
-            s.a -= scoreLerp / 4f * fadeInDelay * Time.deltaTime;
+            s.a -= scoreLerp / 4f * fadeInDelay * Time.unscaledDeltaTime;
             score.GetComponent<TextMeshProUGUI>().color = s;
 
             //Checks for Screen animations to finish
@@ -242,7 +251,7 @@ public class Manager : MenuButtons {
                 //Highscore Digit increase
                 if (Mathf.Round(numberTick) < Mathf.Round(scorez))
                 {
-                    numberTick += numberTickRate * (scorez - oldHighScore) * Time.deltaTime;
+                    numberTick += numberTickRate * (scorez - oldHighScore) * Time.unscaledDeltaTime;
                     highScore.text = "Highscore: " + Mathf.Round(numberTick);
                     
                     //Increases Font Size progressively
@@ -267,9 +276,9 @@ public class Manager : MenuButtons {
         else
         {
             //Score
-            score.transform.localPosition = Vector3.Lerp(score.transform.localPosition, finalScore.transform.localPosition, scoreLerp * Time.deltaTime);
+            score.transform.localPosition = Vector3.Lerp(score.transform.localPosition, finalScore.transform.localPosition, scoreLerp * Time.unscaledDeltaTime);
             score.GetComponent<TextMeshProUGUI>().fontSize = Mathf.Lerp(score.GetComponent<TextMeshProUGUI>().fontSize,
-                finalScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.deltaTime);
+                finalScore.GetComponent<TextMeshProUGUI>().fontSize, scoreLerp * Time.unscaledDeltaTime);
         }
 #endregion
 
@@ -284,7 +293,7 @@ public class Manager : MenuButtons {
 
 #endregion
 
-#region Pause
+    #region Pause
 
     [Header("Pause Menu")]
     private bool isPaused = false;
@@ -489,7 +498,7 @@ public class Manager : MenuButtons {
             //Applies Number to Text
             if (countDown < countDownStartTime && Mathf.Round(countDown) > 0)
             {
-                pauseText.text = Mathf.Round(countDown).ToString() + "...";
+                pauseText.text = Mathf.Round(countDown).ToString();
             }
             //Un-pauses Game
             else if (Mathf.Round(countDown) == 0)

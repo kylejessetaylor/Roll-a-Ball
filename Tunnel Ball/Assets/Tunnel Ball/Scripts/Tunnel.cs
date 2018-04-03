@@ -23,15 +23,26 @@ public class Tunnel : MonoBehaviour
 	//Tunnel Rotation reader
 	protected GameObject rotator;
 
+    //Mobile changes in code
+    public GameObject manager;
+    private float mobileMultiplier;
+
     void Start () {
 		ResetTunnel ();
 		//starts the time tracker & sets values.
 		timer = Time.timeSinceLevelLoad;
 		//Object that tunnel's rotation is read from
 		rotator = GameObject.FindGameObjectWithTag ("Controls");
-	}
 
-	void Update () {
+        //Speed Multiplier for Mobile
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            mobileMultiplier = manager.GetComponent<Manager>().mobileMultiplier;
+            speedMultiplier = speedMultiplier * mobileMultiplier;
+        }
+    }
+
+	void LateUpdate () {
 		TunnelRotation ();
 		TunnelAcceleration ();
     }
@@ -65,7 +76,7 @@ public class Tunnel : MonoBehaviour
             currentVelocity = maxVelocity;
         }
         //Transform Forward
-        transform.position += -transform.forward * currentVelocity * Time.deltaTime;
+        transform.position -= transform.forward * currentVelocity * Time.deltaTime;
 	}
 
 	//Acceleration of the Tunnels
@@ -89,4 +100,5 @@ public class Tunnel : MonoBehaviour
         }
     }
     #endregion
+
 }

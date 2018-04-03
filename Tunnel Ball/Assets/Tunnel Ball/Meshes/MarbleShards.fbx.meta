@@ -1,0 +1,241 @@
+fileFormatVersion: 2
+guid: 0c0bf8a42570dbd4eacadeb6a89145b6
+timeCreated: 1522715662
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Shard10__MeshTexture
+    100004: Shard10_Mesh
+    100006: Shard11__MeshTexture
+    100008: Shard11_Mesh
+    100010: Shard12_Mesh
+    100012: Shard12_MeshTexture
+    100014: Shard13_Mesh
+    100016: Shard13_MeshTexture
+    100018: Shard14__MeshTexture
+    100020: Shard14_Mesh
+    100022: Shard15__MeshTexture
+    100024: Shard15_Mesh
+    100026: Shard1_Mesh
+    100028: Shard1_MeshTexture
+    100030: Shard2_Mesh
+    100032: Shard2_MeshTexture
+    100034: Shard3_Mesh
+    100036: Shard3_MeshTexture
+    100038: Shard4_Mesh
+    100040: Shard4_MeshTexture
+    100042: Shard5_Mesh
+    100044: Shard5_MeshTexture
+    100046: Shard6_Mesh
+    100048: Shard6_MeshTexture
+    100050: Shard7_Mesh
+    100052: Shard7_MeshTexture
+    100054: Shard8_Mesh
+    100056: Shard8_MeshTexture
+    100058: Shard9_Mesh
+    100060: Shard9_MeshTexture
+    400000: //RootNode
+    400002: Shard10__MeshTexture
+    400004: Shard10_Mesh
+    400006: Shard11__MeshTexture
+    400008: Shard11_Mesh
+    400010: Shard12_Mesh
+    400012: Shard12_MeshTexture
+    400014: Shard13_Mesh
+    400016: Shard13_MeshTexture
+    400018: Shard14__MeshTexture
+    400020: Shard14_Mesh
+    400022: Shard15__MeshTexture
+    400024: Shard15_Mesh
+    400026: Shard1_Mesh
+    400028: Shard1_MeshTexture
+    400030: Shard2_Mesh
+    400032: Shard2_MeshTexture
+    400034: Shard3_Mesh
+    400036: Shard3_MeshTexture
+    400038: Shard4_Mesh
+    400040: Shard4_MeshTexture
+    400042: Shard5_Mesh
+    400044: Shard5_MeshTexture
+    400046: Shard6_Mesh
+    400048: Shard6_MeshTexture
+    400050: Shard7_Mesh
+    400052: Shard7_MeshTexture
+    400054: Shard8_Mesh
+    400056: Shard8_MeshTexture
+    400058: Shard9_Mesh
+    400060: Shard9_MeshTexture
+    2100000: lambert1
+    2300000: Shard10__MeshTexture
+    2300002: Shard10_Mesh
+    2300004: Shard11__MeshTexture
+    2300006: Shard11_Mesh
+    2300008: Shard12_Mesh
+    2300010: Shard12_MeshTexture
+    2300012: Shard13_Mesh
+    2300014: Shard13_MeshTexture
+    2300016: Shard14__MeshTexture
+    2300018: Shard14_Mesh
+    2300020: Shard15__MeshTexture
+    2300022: Shard15_Mesh
+    2300024: Shard1_Mesh
+    2300026: Shard1_MeshTexture
+    2300028: Shard2_Mesh
+    2300030: Shard2_MeshTexture
+    2300032: Shard3_Mesh
+    2300034: Shard3_MeshTexture
+    2300036: Shard4_Mesh
+    2300038: Shard4_MeshTexture
+    2300040: Shard5_Mesh
+    2300042: Shard5_MeshTexture
+    2300044: Shard6_Mesh
+    2300046: Shard6_MeshTexture
+    2300048: Shard7_Mesh
+    2300050: Shard7_MeshTexture
+    2300052: Shard8_Mesh
+    2300054: Shard8_MeshTexture
+    2300056: Shard9_Mesh
+    2300058: Shard9_MeshTexture
+    3300000: Shard10__MeshTexture
+    3300002: Shard10_Mesh
+    3300004: Shard11__MeshTexture
+    3300006: Shard11_Mesh
+    3300008: Shard12_Mesh
+    3300010: Shard12_MeshTexture
+    3300012: Shard13_Mesh
+    3300014: Shard13_MeshTexture
+    3300016: Shard14__MeshTexture
+    3300018: Shard14_Mesh
+    3300020: Shard15__MeshTexture
+    3300022: Shard15_Mesh
+    3300024: Shard1_Mesh
+    3300026: Shard1_MeshTexture
+    3300028: Shard2_Mesh
+    3300030: Shard2_MeshTexture
+    3300032: Shard3_Mesh
+    3300034: Shard3_MeshTexture
+    3300036: Shard4_Mesh
+    3300038: Shard4_MeshTexture
+    3300040: Shard5_Mesh
+    3300042: Shard5_MeshTexture
+    3300044: Shard6_Mesh
+    3300046: Shard6_MeshTexture
+    3300048: Shard7_Mesh
+    3300050: Shard7_MeshTexture
+    3300052: Shard8_Mesh
+    3300054: Shard8_MeshTexture
+    3300056: Shard9_Mesh
+    3300058: Shard9_MeshTexture
+    4300000: Shard1_Mesh
+    4300002: Shard2_Mesh
+    4300004: Shard3_Mesh
+    4300006: Shard4_Mesh
+    4300008: Shard5_Mesh
+    4300010: Shard6_Mesh
+    4300012: Shard7_Mesh
+    4300014: Shard8_Mesh
+    4300016: Shard1_MeshTexture
+    4300018: Shard2_MeshTexture
+    4300020: Shard3_MeshTexture
+    4300022: Shard4_MeshTexture
+    4300024: Shard5_MeshTexture
+    4300026: Shard6_MeshTexture
+    4300028: Shard7_MeshTexture
+    4300030: Shard8_MeshTexture
+    4300032: Shard9_Mesh
+    4300034: Shard9_MeshTexture
+    4300036: Shard10_Mesh
+    4300038: Shard10__MeshTexture
+    4300040: Shard11_Mesh
+    4300042: Shard11__MeshTexture
+    4300044: Shard12_MeshTexture
+    4300046: Shard13_Mesh
+    4300048: Shard13_MeshTexture
+    4300050: Shard14_Mesh
+    4300052: Shard14__MeshTexture
+    4300054: Shard15_Mesh
+    4300056: Shard15__MeshTexture
+    4300058: Shard12_Mesh
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
