@@ -14,8 +14,23 @@ public class MenuButtons : MonoBehaviour {
 
     [Header("Audio")]
     public GameObject audioManager;
-
+    public GameObject backgroundMusic;
+    public float delayTime;
     private bool gameStarted;
+
+    private void Start()
+    {
+        StartCoroutine(StartMusic(delayTime));
+    }
+
+    IEnumerator StartMusic(float time)
+    {
+        //suspend execution for X seconds
+        yield return new WaitForSeconds(time);
+
+        //Starts loop music
+        backgroundMusic.GetComponent<AudioSource>().enabled = true;
+    }
 
     void Update()
     {
@@ -43,13 +58,13 @@ public class MenuButtons : MonoBehaviour {
     {
         //Exits Game.
         Application.Quit();
-        audioManager.GetComponent<AudioSource>().Play();
+        audioManager.transform.GetChild(0).GetComponent<AudioSource>().Play();
     }
 
     public void RestartGame(string restartGame)
     {
         //Audio Sound
-        audioManager.GetComponent<AudioSource>().Play();
+        audioManager.transform.GetChild(0).GetComponent<AudioSource>().Play();
 
         //Reloads scene.
         StartCoroutine(ExecuteAfterTime(0.2f, restartGame));
@@ -94,7 +109,7 @@ public class MenuButtons : MonoBehaviour {
     {
         player.transform.GetComponent<MarbleSpiral>().startButtonPressed = true;
         gameStarted = true;
-        audioManager.GetComponent<AudioSource>().Play();
+        audioManager.transform.GetChild(0).GetComponent<AudioSource>().Play();
     }
 
     //Fades out menu

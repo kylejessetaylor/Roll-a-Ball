@@ -186,8 +186,9 @@ public class Manager : MenuButtons {
     //Shows Score on Endgame screen
     public void YourScore()
     {
-        /// SMOOTH movement of current score to center
-        /// --------------------------------------------------------
+        //Soften Music
+        backgroundMusic.GetComponent<AudioSource>().volume -= backgroundMusic.GetComponent<AudioSource>().volume * Time.unscaledDeltaTime * 2f;
+
         //Turns Buttons off
         leftButton.SetActive(false);
         rightButton.SetActive(false);
@@ -359,8 +360,8 @@ public class Manager : MenuButtons {
         {
             isPaused = true;
             unPause = false;
-            //Audio Sound
-            audioManager.GetComponent<AudioSource>().Play();
+            //Button Audio Sound
+            audioManager.transform.GetChild(0).GetComponent<AudioSource>().Play();
 
             //Disable Control Buttons
             leftButton.SetActive(false);
@@ -374,8 +375,8 @@ public class Manager : MenuButtons {
         if (playerC.activeSelf)
         {
             unPause = true;
-            //Audio Sound
-            audioManager.GetComponent<AudioSource>().Play();
+            //Button Audio Sound
+            audioManager.transform.GetChild(0).GetComponent<AudioSource>().Play();
         }
     }
 
