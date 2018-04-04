@@ -38,6 +38,9 @@ public class Manager : MenuButtons {
         //Audio ticking
         firstTick = true;
 
+        //Disables restart button
+        tryAgain.GetComponent<Button>().interactable = false;
+
         //Sets Android's max FPS
         if (SystemInfo.deviceType == DeviceType.Handheld)
         {
@@ -159,24 +162,12 @@ public class Manager : MenuButtons {
         else if (scorez <= currentHighScore)
         {
             YourScore();
-
-            //Disables Pause Button
-            pauseButtonText.transform.parent.gameObject.SetActive(false);
-
-            //Exit Button interactable
-            exitGame.GetComponent<Button>().interactable = true;
         }
         //Saves new highscore and applies text when player dies
         else if (scorez > currentHighScore)
         {
             SaveScore();
-            YourScore();
-
-            //Disables Pause Button
-            pauseButtonText.transform.parent.GetComponent<Button>().interactable = false;
-
-            //Exit Button interactable
-            exitGame.GetComponent<Button>().interactable = true;
+            YourScore();          
         }
     }
 
@@ -193,7 +184,14 @@ public class Manager : MenuButtons {
         leftButton.SetActive(false);
         rightButton.SetActive(false);
 
-#region Bothscore Setup
+        //Disables Pause Button
+        pauseButtonText.transform.parent.GetComponent<Button>().interactable = false;
+        //Disables restart button
+        tryAgain.GetComponent<Button>().interactable = true;
+        //Exit Button interactable
+        exitGame.GetComponent<Button>().interactable = true;
+
+        #region Bothscore Setup
 
         //Lerp Movement transition
         scoreTable.transform.position = Vector2.Lerp(scoreTable.transform.position, deadTable.transform.position, scoreLerp * Time.unscaledDeltaTime);
