@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Controls : MonoBehaviour {
 
-	//Smooth Rotation
-	public float rotationSpeed = 10;
+    //Audio
+    public GameObject audioManager;
+
+    //Smooth Rotation
+    public float rotationSpeed = 10;
 	private Quaternion targetRotation;
 
 	//Player's corpse spawn
@@ -46,12 +49,28 @@ public class Controls : MonoBehaviour {
     {
         //Sets new targetRotation
         targetRotation *= Quaternion.AngleAxis(45, Vector3.back);
+
+        //Plays MarbleTurn Audio
+        AudioSource marbleTurn = audioManager.transform.GetChild(2).GetComponent<AudioSource>();
+        if (marbleTurn.isPlaying != true)
+        {
+            marbleTurn.Play();
+        }
+
     }
 
     public void TurnLeft()
     {
         //Sets new targetRotation
         targetRotation *= Quaternion.AngleAxis(45, Vector3.forward);
+
+        //Plays MarbleTurn Audio
+        //Plays MarbleTurn Audio
+        AudioSource marbleTurn = audioManager.transform.GetChild(2).GetComponent<AudioSource>();
+        if (marbleTurn.isPlaying != true)
+        {
+            marbleTurn.Play();
+        }
     }
 
     //Turns on Player Corpse when death trigger activates

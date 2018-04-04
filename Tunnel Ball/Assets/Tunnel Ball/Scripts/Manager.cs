@@ -13,6 +13,8 @@ public class Manager : MenuButtons {
 
     public float mobileMultiplier = 1.25f;
 
+    private bool firstTick;
+
     void Awake()
     {       
         //Sets player
@@ -21,18 +23,20 @@ public class Manager : MenuButtons {
         //Hides Pause Menu
         HidePauseOnStart();
 
-        ////Changes score multiplier to match with new tunnel speed multiplier
-        //if (SystemInfo.deviceType == DeviceType.Handheld)
-        //{
-        //    scoremultiplier = scoremultiplier * mobileMultiplier;
-        //}
+        //Reduce gravity
+        Physics.gravity = new Vector3(0f, -9.8f, 0f);
 
+        //Audio
+        rollingSound = GameObject.Find("MarbleRolling");
     }
 
     void Start () {
         //TEST DELETE ME
         //PlayerPrefs.SetFloat("Highscore", 0);
         //TEST DELETE ME
+
+        //Audio ticking
+        firstTick = true;
 
         //Sets Android's max FPS
         if (SystemInfo.deviceType == DeviceType.Handheld)
@@ -60,15 +64,18 @@ public class Manager : MenuButtons {
         //For PC use
         PlayerDeathHotkeys();
         //Pause Hotkeys
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Space))
+        if (GameObject.FindGameObjectWithTag("Player") == true)
         {
-            if (Time.timeScale == 1)
+            if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Space))
             {
-                Pause();
-            }
-            else
-            {
-                UnPause();
+                if (Time.timeScale == 1)
+                {
+                    Pause();
+                }
+                else
+                {
+                    UnPause();
+                }
             }
         }
 
@@ -77,37 +84,12 @@ public class Manager : MenuButtons {
         {
             PauseActions();
         }
+
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            exitGame.SetActive(false);
+        }
     }
-
-    #region Fog
-
-    ////Fog
-    //[Header("Fog")]
-    //public float maxFog = 0.02f;
-    //public float minFog = 0.015f;
-    //public float fogRate = 1f;
-
-    //void FogUpdate()
-    //{
-    //    ////Fog Density based on Velocity
-    //    //RenderSettings.fogDensity = Mathf.Lerp(maxFog, minFog, fogRate * Time.unscaledDeltaTime);
-    //}
-
-    //void FogFading()
-    //{
-    //    StartCoroutine("FogFadingCoroutine");
-    //}
-
-    //IEnumerable FogFadingCoroutine()
-    //{
-    //    do
-    //    {
-    //        RenderSettings.fogDensity -= fogRate * Time.unscaledDeltaTime;
-    //        return yield null;
-    //    } while (RenderSettings.fogDensity > minFog);
-    //}
-
-    #endregion
 
     #region FirstTunnel
 
@@ -159,6 +141,9 @@ public class Manager : MenuButtons {
     protected float scorez;
     protected float currentHighScore;
 
+    //Sound
+    private GameObject rollingSound;
+
     //Calculates score during runtime & finalizes/saves it after death
     public void CurrentScore()
     {
@@ -174,12 +159,18 @@ public class Manager : MenuButtons {
         else if (scorez <= currentHighScore)
         {
             YourScore();
+
+            //Disables Pause Button
+            pauseButtonText.transform.parent.gameObject.SetActive(false);
         }
         //Saves new highscore and applies text when player dies
         else if (scorez > currentHighScore)
         {
             SaveScore();
             YourScore();
+
+            //Disables Pause Button
+            pauseButtonText.transform.parent.GetComponent<Button>().interactable = false;
         }
     }
 
@@ -188,6 +179,9 @@ public class Manager : MenuButtons {
     {
         //Soften Music
         backgroundMusic.GetComponent<AudioSource>().volume -= backgroundMusic.GetComponent<AudioSource>().volume * Time.unscaledDeltaTime * 2f;
+        //Soften Music
+        rollingSound = GameObject.Find("MarbleRolling");
+        rollingSound.GetComponent<AudioSource>().volume -= rollingSound.GetComponent<AudioSource>().volume * Time.unscaledDeltaTime * 2f;
 
         //Turns Buttons off
         leftButton.SetActive(false);
@@ -227,6 +221,21 @@ public class Manager : MenuButtons {
         tAT.a += (scoreLerp * buttonMultiplier * 2f) / (fadeInDelay) * Time.unscaledDeltaTime;
         tryAgain.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = tAT;
 
+        ///Exit Game
+        //if not using mobile
+        if (SystemInfo.deviceType == DeviceType.Desktop)
+        {
+            //Exit Button
+            exitGame.gameObject.SetActive(true);
+            Color eG = exitGame.GetComponent<Image>().color;
+            eG.a += (scoreLerp * buttonMultiplier) / fadeInDelay * Time.unscaledDeltaTime;
+            exitGame.GetComponent<Image>().color = eG;
+            //Exit Button Text
+            Color eGT = exitGame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
+            eGT.a += (scoreLerp * buttonMultiplier * 2f) / (fadeInDelay) * Time.unscaledDeltaTime;
+            exitGame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = eGT;
+        }
+
 #endregion
 
 #region Highscore Setup
@@ -249,23 +258,51 @@ public class Manager : MenuButtons {
             if (deadHighScore.GetComponent<TextMeshProUGUI>().fontSize -
             highScore.GetComponent<TextMeshProUGUI>().fontSize <= startTicking)
             {
+                //Audio Highscore tick
+                AudioSource tickSound = audioManager.transform.GetChild(1).GetComponent<AudioSource>();
+
                 //Highscore Digit increase
                 if (Mathf.Round(numberTick) < Mathf.Round(scorez))
-                {
+                {                   
+                    //Increases temp number for score increase
                     numberTick += numberTickRate * (scorez - oldHighScore) * Time.unscaledDeltaTime;
                     highScore.text = "Highscore: " + Mathf.Round(numberTick);
                     
+                    //First Tick
+                    if (firstTick)
+                    {
+                        tickSound.Play();
+                        firstTick = false;
+                    }
+
                     //Increases Font Size progressively
                     if (numberTick - lilNumber >= 1f)
                     {
                         lilNumber = numberTick;
                         highScore.fontSize += fontIncreaseRate;
+
+                        //Play Audio
+                        if (tickSound.isPlaying == false)
+                        {
+                            tickSound.Play();
+                            if (tickSound.pitch < 1f)
+                            {
+                                tickSound.pitch += numberTickRate * Time.unscaledDeltaTime;
+                            }
+                            else
+                            {
+                                tickSound.pitch = 1;
+                            }
+                        }
                     }
                 }
                 //Stops going above actual highscore
                 else
                 {
                     highScore.text = "Highscore: " + PlayerPrefs.GetFloat("Highscore");
+
+                    //Disables audio
+                    tickSound.enabled = false;
                 }
             }
             
@@ -299,6 +336,8 @@ public class Manager : MenuButtons {
     [Header("Pause Menu")]
     private bool isPaused = false;
     private bool unPause = false;
+
+    public GameObject exitGame;
 
     public GameObject pauseButtonText;
     public GameObject pauseTitle;
@@ -356,7 +395,7 @@ public class Manager : MenuButtons {
     //Pause Button
     public void Pause()
     {
-        if (playerC.activeSelf)
+        if (playerC)
         {
             isPaused = true;
             unPause = false;
@@ -385,6 +424,12 @@ public class Manager : MenuButtons {
         ///Pauses Game -----------------------------------------------------------------------------------------------
         if (unPause == false)
         {
+            //Disables exit game button
+            exitGame.GetComponent<Button>().interactable = false;
+
+            //Enables cursor
+            Cursor.visible = true;
+
             //Pauses Game
             Time.timeScale = 0;
             countDown = countDownStartTime;
@@ -425,6 +470,19 @@ public class Manager : MenuButtons {
                 //Fade-In Menu Text
                 mt.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
                 menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = mt;
+
+                //Exit Button
+                if (SystemInfo.deviceType == DeviceType.Desktop)
+                {
+                    //Fade-In Exit Button
+                    Color eG = exitGame.GetComponent<Image>().color;
+                    eG.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
+                    exitGame.GetComponent<Image>().color = eG;
+                    //Fade-In Exit Text
+                    Color eGT = exitGame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
+                    eGT.a += (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
+                    exitGame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = eGT;
+                }
             }
 
         }
@@ -432,6 +490,9 @@ public class Manager : MenuButtons {
         ///Un-pauses Game -----------------------------------------------------------------------------------------------
         else if (unPause)
         {
+            //Disables exit game button
+            exitGame.GetComponent<Button>().interactable = false;
+
             Color rb = resumeButton.GetComponent<Image>().color;
             Color rt = resumeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
             Color mb = menuButton.GetComponent<Image>().color;
@@ -456,6 +517,19 @@ public class Manager : MenuButtons {
                 //Fade-Out Menu Text
                 mt.a -= (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime * 2f;
                 menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = mt;
+
+                //Exit Button
+                if (SystemInfo.deviceType == DeviceType.Desktop)
+                {
+                    //Fade-In Exit Button
+                    Color eG = exitGame.GetComponent<Image>().color;
+                    eG.a -= (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
+                    exitGame.GetComponent<Image>().color = eG;
+                    //Fade-In Exit Text
+                    Color eGT = exitGame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
+                    eGT.a -= (scoreLerp * 2f) / fadeInDelay * Time.unscaledDeltaTime;
+                    exitGame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = eGT;
+                }
             }
 
             //When both invisible, disable both buttons
@@ -476,6 +550,14 @@ public class Manager : MenuButtons {
                 mt.a = 0;
                 menuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = mt;
 
+                //Exit Button
+                Color eG = exitGame.GetComponent<Image>().color;
+                eG.a = 0;
+                exitGame.GetComponent<Image>().color = eG;
+                //Exit Text
+                Color eGT = exitGame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color;
+                eGT.a = 0;
+                exitGame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = eGT;
             }
 
             ///Title enable -------------------------------------------------------------------------
@@ -485,6 +567,9 @@ public class Manager : MenuButtons {
             //Lerps rotation from current to Vector3.zero (quaternion.identity)
             pauseTitle.transform.rotation = Quaternion.Lerp(pauseTitle.transform.rotation, Quaternion.identity, scoreLerp * Time.unscaledDeltaTime);
 
+            //Enables cursor
+            Cursor.visible = false;
+
             //-------------------------------------------------------------------------
 
             TextMeshProUGUI pauseText = pauseTitle.GetComponent<TextMeshProUGUI>();
@@ -493,7 +578,7 @@ public class Manager : MenuButtons {
             if (Vector2.Distance(pauseTitle.transform.localPosition, resumeButton.transform.localPosition) <= 5f)
             {
                 //Calculates countdown time
-                countDown -= (scoreLerp * Time.unscaledDeltaTime)/3f;               
+                countDown -= (scoreLerp * Time.unscaledDeltaTime) / 3f;
             }
 
             //Applies Number to Text
@@ -521,7 +606,7 @@ public class Manager : MenuButtons {
 
                 //Un-pauses Game
                 Time.timeScale = 1;
-            }           
+            }
             //Text to display b4 countdown
             else
             {

@@ -21,6 +21,9 @@ public class MenuButtons : MonoBehaviour {
     private void Start()
     {
         StartCoroutine(StartMusic(delayTime));
+
+        //Enables cursor
+        Cursor.visible = true;
     }
 
     IEnumerator StartMusic(float time)
@@ -42,6 +45,10 @@ public class MenuButtons : MonoBehaviour {
         }
 
         Time.timeScale = 1;
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
+        {
+            StartGame();
+        }
     }
 
     #region Buttons
@@ -107,9 +114,18 @@ public class MenuButtons : MonoBehaviour {
     //Function for button to activate
     public void StartGame()
     {
+        //Turns off button interaction
+        uiPannel.transform.GetChild(0).GetComponent<Button>().interactable = false;
+        
         player.transform.GetComponent<MarbleSpiral>().startButtonPressed = true;
         gameStarted = true;
         audioManager.transform.GetChild(0).GetComponent<AudioSource>().Play();
+
+        //Reduce gravity
+        Physics.gravity = new Vector3(0f, -20f, 0f);
+
+        //Enables cursor
+        Cursor.visible = false;
     }
 
     //Fades out menu

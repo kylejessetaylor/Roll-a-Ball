@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class MarbleSpiral : MonoBehaviour {
 
@@ -23,6 +25,18 @@ public class MarbleSpiral : MonoBehaviour {
     public float maxSpeed;
     public float faceSpeed;
 
+    //Loadspinner
+    public GameObject loadSpinner;
+    private bool loading;
+    private float dotTicker;
+
+    private void Start()
+    {
+        loadSpinner.SetActive(false);
+        loading = false;
+        dotTicker = 0f;
+    }
+
     // Update is called once per frame
     void Update () {
         //Stops function from occuring if user presses start button
@@ -35,10 +49,35 @@ public class MarbleSpiral : MonoBehaviour {
         {
             MoveToCenter();
         }
-        //Fall down tunnel
-        else
+
+        //Loadspinner Text
+        if (loading)
         {
-            return;
+            TextMeshProUGUI text = loadSpinner.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+            dotTicker += 2 * Time.deltaTime;
+
+            //Resets counter
+            if (dotTicker > 4)
+            {
+                dotTicker -= 4f;
+            }
+            //Applies Text
+            if (dotTicker >= 0 && dotTicker < 1)
+            {
+                text.text = "Loading";
+            }
+            else if (dotTicker >= 1 && dotTicker < 2)
+            {
+                text.text = "Loading.";
+            }
+            else if (dotTicker >= 2 && dotTicker < 3)
+            {
+                text.text = "Loading..";
+            }
+            else if (dotTicker >= 3 && dotTicker < 4)
+            {
+                text.text = "Loading...";
+            }
         }
 	}
 
@@ -55,6 +94,7 @@ public class MarbleSpiral : MonoBehaviour {
         rb.AddForce(direction * moveSpeed, ForceMode.Impulse);
     }
 
+    //Circular movement
     private void SpiralPosition()
     {
         //Smooth Timer
@@ -82,6 +122,16 @@ public class MarbleSpiral : MonoBehaviour {
         if (other.name == "FallTrigger")
         {
             transform.GetComponent<Rigidbody>().useGravity = true;
+        }
+
+        //Turns on loadspinner
+        if (other.name == "LoadSpinnerTrigger")
+        {
+            loadSpinner.SetActive(true);
+            loading = true;
+
+            //Sets first text
+            loadSpinner.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Loading";
         }
 
         //Changes Scene
