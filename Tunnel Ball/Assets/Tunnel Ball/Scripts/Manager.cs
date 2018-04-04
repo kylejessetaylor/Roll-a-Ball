@@ -162,6 +162,9 @@ public class Manager : MenuButtons {
 
             //Disables Pause Button
             pauseButtonText.transform.parent.gameObject.SetActive(false);
+
+            //Exit Button interactable
+            exitGame.GetComponent<Button>().interactable = true;
         }
         //Saves new highscore and applies text when player dies
         else if (scorez > currentHighScore)
@@ -171,6 +174,9 @@ public class Manager : MenuButtons {
 
             //Disables Pause Button
             pauseButtonText.transform.parent.GetComponent<Button>().interactable = false;
+
+            //Exit Button interactable
+            exitGame.GetComponent<Button>().interactable = true;
         }
     }
 
@@ -425,7 +431,12 @@ public class Manager : MenuButtons {
         if (unPause == false)
         {
             //Disables exit game button
-            exitGame.GetComponent<Button>().interactable = false;
+            exitGame.GetComponent<Button>().interactable = true;
+            //Hotkey
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ExitGameBtn();
+            }
 
             //Enables cursor
             Cursor.visible = true;
